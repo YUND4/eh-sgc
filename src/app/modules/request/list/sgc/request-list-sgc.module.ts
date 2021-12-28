@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RequestListComponent } from '../list/request-list.component';
+import { RequestListSGCComponent } from './request-list-sgc.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Route, RouterModule } from '@angular/router';
@@ -10,13 +10,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export const routes: Route[] = [
   {
       path     : '',
-      component: RequestListComponent
+      component: RequestListSGCComponent
   }
 ];
 
 @NgModule({
   declarations: [
-    RequestListComponent,
+    RequestListSGCComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -27,4 +27,4 @@ export const routes: Route[] = [
     MatTooltipModule,
   ]
 })
-export class RequestListModule { }
+export class RequestListSGCModule { }

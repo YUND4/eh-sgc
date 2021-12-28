@@ -4,10 +4,10 @@ import { List } from 'lodash';
 
 @Component({
     selector     : 'request-trace',
-    templateUrl  : './request-trace.component.html',
+    templateUrl  : './request-trace-sci.component.html',
     encapsulation: ViewEncapsulation.None
 })
-export class RequestTraceComponent implements OnInit
+export class RequestTraceSCIComponent implements OnInit
 {
 
     horizontalStepperForm: FormGroup;

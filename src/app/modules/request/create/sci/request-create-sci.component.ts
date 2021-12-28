@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'request-create',
-  templateUrl: './request-create.component.html',
-  styleUrls: ['./request-create.component.scss'],
+  templateUrl: './request-create-sci.component.html',
+  styleUrls: ['./request-create-sci.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class RequestCreateComponent {
+export class RequestCreateSCIComponent {
   formFieldHelpers: string[] = [''];
   configForm: FormGroup;
 

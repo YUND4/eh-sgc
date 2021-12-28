@@ -13,19 +13,19 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatSelectModule } from '@angular/material/select';
 import { FuseHighlightModule } from '@fuse/components/highlight';
 import { SharedModule } from 'app/shared/shared.module';
-import { RequestCreateComponent } from './request-create.component';
+import { RequestCreateSCIComponent } from './request-create-sci.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export const routes: Route[] = [
     {
         path     : '',
-        component: RequestCreateComponent
+        component: RequestCreateSCIComponent
     }
 ];
 
 @NgModule({
     declarations: [
-        RequestCreateComponent
+        RequestCreateSCIComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -45,6 +45,6 @@ export const routes: Route[] = [
         SharedModule
     ]
 })
-export class RequestCreateModule
+export class RequestCreateSCIModule
 {
 }

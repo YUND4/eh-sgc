@@ -9,7 +9,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { SharedModule } from 'app/shared/shared.module';
-import { RequestTraceComponent } from './request-trace.component';
+import { RequestTraceSCIComponent } from './request-trace-sci.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,13 +19,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 export const routes: Route[] = [
     {
         path     : '',
-        component: RequestTraceComponent
+        component: RequestTraceSCIComponent
     }
 ];
 
 @NgModule({
     declarations: [
-      RequestTraceComponent
+      RequestTraceSCIComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -44,6 +44,6 @@ export const routes: Route[] = [
         MatNativeDateModule
     ]
 })
-export class RequestTraceModule
+export class RequestTraceSCIModule
 {
 }

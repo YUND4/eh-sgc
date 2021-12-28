@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RequestListComponent } from './request-list.component';
+import { RequestListSCIComponent } from './request-list-sci.component';
 
-describe('RequestListComponent', () => {
-  let component: RequestListComponent;
-  let fixture: ComponentFixture<RequestListComponent>;
+describe('RequestListSCIComponent', () => {
+  let component: RequestListSCIComponent;
+  let fixture: ComponentFixture<RequestListSCIComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RequestListComponent ]
+      declarations: [ RequestListSCIComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RequestListComponent);
+    fixture = TestBed.createComponent(RequestListSCIComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
