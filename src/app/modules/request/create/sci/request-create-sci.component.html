@@ -27,24 +27,24 @@
   <div class="flex-auto p-6 sm:p-10">
 
     <div class="max-w-6xl">
-      <form class="flex flex-col mt-8 p-8 pb-4 bg-card rounded-2xl shadow overflow-hidden">
+      <form class="flex flex-col mt-8 p-8 pb-4 bg-card rounded-2xl shadow overflow-hidden" [formGroup]="requestFormControl">
 
         <div class="w-full">
           <mat-form-field class="w-1/4 pl-2">
             <mat-label>Fecha inicio</mat-label>
-            <input matInput [matDatepicker]="picker1">
+            <input matInput [matDatepicker]="picker1" name="init_date" formControlName="init_date">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="w-1/4 pl-4">
             <mat-label>Fecha detecta</mat-label>
-            <input matInput [matDatepicker]="picker2">
+            <input matInput [matDatepicker]="picker2" name="detected_date" formControlName="detected_date">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="w-2/4 pl-4">
             <mat-label>Detectado en</mat-label>
-            <mat-select>
+            <mat-select name="detected_in" formControlName="detected_in">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -55,7 +55,7 @@
         <div class="w-full">
           <mat-form-field class="w-2/3 pl-2">
             <mat-label>Detectado por </mat-label>
-            <mat-select>
+            <mat-select name="detected_for_id" formControlName="detected_for_id">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -64,7 +64,7 @@
           </mat-form-field>
           <mat-form-field class="w-1/3 pl-4">
             <mat-label>Requisito incumplido</mat-label>
-            <mat-select>
+            <mat-select name="unfulfilled_requirement" formControlName="unfulfilled_requirement">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -75,7 +75,7 @@
         <div class="w-full">
           <mat-form-field class="w-2/3 pl-2">
             <mat-label>Lider del proceso </mat-label>
-            <mat-select>
+            <mat-select name="unfulfilled_requirement" formControlName="unfulfilled_requirement">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -84,7 +84,7 @@
           </mat-form-field>
           <mat-form-field class="w-1/3 pl-4">
             <mat-label>Proceso afectado</mat-label>
-            <mat-select>
+            <mat-select name="process_affected" formControlName="process_affected">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -95,7 +95,7 @@
         <div class="w-full">
           <mat-form-field class="w-2/3 pl-2">
             <mat-label>Como se detecta </mat-label>
-            <mat-select>
+            <mat-select name="how_detected" formControlName="how_detected">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -104,50 +104,7 @@
           </mat-form-field>
           <mat-form-field class="w-1/3 pl-4">
             <mat-label>Tipo de accion</mat-label>
-            <mat-select>
-              <ng-container
-                *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
-                <mat-option [value]="color">{{color | titlecase}}</mat-option>
-              </ng-container>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="w-full">
-          <mat-form-field class="w-1/5 pl-2">
-            <mat-label>Hallazgo No</mat-label>
-            <mat-select>
-              <ng-container
-                *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
-                <mat-option [value]="color">{{color | titlecase}}</mat-option>
-              </ng-container>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-1/5 pl-4">
-            <mat-select>
-              <ng-container
-                *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
-                <mat-option [value]="color">{{color | titlecase}}</mat-option>
-              </ng-container>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-1/5 pl-4">
-            <mat-select>
-              <ng-container
-                *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
-                <mat-option [value]="color">{{color | titlecase}}</mat-option>
-              </ng-container>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-1/5 pl-4">
-            <mat-select>
-              <ng-container
-                *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
-                <mat-option [value]="color">{{color | titlecase}}</mat-option>
-              </ng-container>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-1/5 pl-4">
-            <mat-select>
+            <mat-select name="action_type" formControlName="action_type">
               <ng-container
                 *ngFor="let color of ['primary', 'accent', 'warn', 'basic', 'info', 'success', 'warning', 'error']">
                 <mat-option [value]="color">{{color | titlecase}}</mat-option>
@@ -157,21 +114,31 @@
         </div>
         <div class="w-full">
           <mat-form-field class="w-full pl-2">
+            <mat-label>Evidencia</mat-label>
+            <ngx-mat-file-input placeholder="Basic Input"></ngx-mat-file-input>
+            <mat-icon matSuffix>folder</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="w-full">
+          <mat-form-field class="w-full pl-2">
             <mat-label>Descripcion de la evidencia</mat-label>
-            <textarea matInput [placeholder]="''" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
+              name="evidence_description" formControlName="evidence_description"></textarea>
           </mat-form-field>
         </div>
 
         <div class="w-full">
           <mat-form-field class="w-full pl-2">
             <mat-label>Descripcion del hallazgo o mejora</mat-label>
-            <textarea matInput [placeholder]="''" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
+              name="request_description" formControlName="request_description"></textarea>
           </mat-form-field>
         </div>
 
-        <button mat-button routerLink="/request/invoice" class="bg-primary text-white">Crear una solicitud</button>
+        <button mat-button class="bg-primary text-white" (click)="submit()">Crear una solicitud</button>
       </form>
     </div>
 

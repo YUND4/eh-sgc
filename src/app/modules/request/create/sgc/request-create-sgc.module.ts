@@ -15,6 +15,7 @@ import { FuseHighlightModule } from '@fuse/components/highlight';
 import { SharedModule } from 'app/shared/shared.module';
 import { RequestCreateSGCComponent } from './request-create-sgc.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 export const routes: Route[] = [
     {
@@ -41,6 +42,7 @@ export const routes: Route[] = [
         MatMomentDateModule,
         MatSelectModule,
         MatCheckboxModule,
+        MaterialFileInputModule,
         FuseHighlightModule,
         SharedModule
     ]

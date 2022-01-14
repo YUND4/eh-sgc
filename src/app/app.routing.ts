@@ -81,8 +81,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'request', children: [
-          { path: 'create/sci', loadChildren: () => import('app/modules/request/create/sgc/request-create-sgc.module').then(m => m.RequestCreateSGCModule) },
-          { path: 'create/sgc', loadChildren: () => import('app/modules/request/create/sci/request-create-sci.module').then(m => m.RequestCreateSCIModule) },
+          { path: 'create/sci', loadChildren: () => import('app/modules/request/create/sci/request-create-sci.module').then(m => m.RequestCreateSCIModule) },
+          { path: 'create/sgc', loadChildren: () => import('app/modules/request/create/sgc/request-create-sgc.module').then(m => m.RequestCreateSGCModule) },
           { path: 'list/sgc', loadChildren: () => import('app/modules/request/list/sgc/request-list-sgc.module').then(m => m.RequestListSGCModule) },
           { path: 'list/sci', loadChildren: () => import('app/modules/request/list/sci/request-list-sci.module').then(m => m.RequestListSCIModule) },
           { path: 'detail', loadChildren: () => import('app/modules/request/detail/request-detail.module').then(m => m.RequestDetailModule) },

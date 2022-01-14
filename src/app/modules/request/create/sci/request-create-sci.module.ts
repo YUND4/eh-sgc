@@ -15,6 +15,11 @@ import { FuseHighlightModule } from '@fuse/components/highlight';
 import { SharedModule } from 'app/shared/shared.module';
 import { RequestCreateSCIComponent } from './request-create-sci.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { BaseInterceptor } from 'app/shared/base/base.interceptor';
+import { RequestService } from 'app/shared/services/request.service';
 
 export const routes: Route[] = [
     {
@@ -28,6 +33,7 @@ export const routes: Route[] = [
         RequestCreateSCIComponent
     ],
     imports     : [
+        HttpClientModule,
         RouterModule.forChild(routes),
         MatButtonModule,
         MatButtonToggleModule,
@@ -41,8 +47,14 @@ export const routes: Route[] = [
         MatMomentDateModule,
         MatSelectModule,
         MatCheckboxModule,
+        MaterialFileInputModule,
         FuseHighlightModule,
-        SharedModule
+        SharedModule,
+        FormsModule
+    ],
+    providers: [
+      RequestService,
+      { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })
 export class RequestCreateSCIModule
