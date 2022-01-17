@@ -16,6 +16,11 @@ import { SharedModule } from 'app/shared/shared.module';
 import { RequestCreateSGCComponent } from './request-create-sgc.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { FormsModule } from '@angular/forms';
+import { RequestService } from 'app/shared/services/request.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BaseInterceptor } from 'app/shared/base/base.interceptor';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export const routes: Route[] = [
     {
@@ -44,7 +49,13 @@ export const routes: Route[] = [
         MatCheckboxModule,
         MaterialFileInputModule,
         FuseHighlightModule,
-        SharedModule
+        SharedModule,
+        FormsModule,
+        NgxMatSelectSearchModule
+    ],
+    providers: [
+      RequestService,
+      { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })
 export class RequestCreateSGCModule

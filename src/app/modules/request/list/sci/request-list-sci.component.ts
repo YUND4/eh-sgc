@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { String } from 'lodash';
+import { RequestModel } from '../../../../shared/models/request.model';
+import { RequestService } from 'app/shared/services/request.service';
+import { FormBuilder } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 
 export interface PeriodicElement {
   id: number;
@@ -28,12 +32,47 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./request-list-sci.component.scss']
 })
 export class RequestListSCIComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'tech_lead', 'date', 'desc', 'options'];
+  displayedColumns: string[] = ['id', 'process_lead_name', 'detected_date', 'request_description', 'options'];
+  formFieldHelpers: string[] = [''];
   dataSource = ELEMENT_DATA;
+  requests: RequestModel[] = [];
+  totalItems: number =  1;
+  itemsPerPage: number = 10;
+  currentPage: number = 0;
+  postPerPage: number = 0;
 
-  constructor() { }
+  constructor(private _service: RequestService, private _formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {
+    this.updateTable();
+  }
+
+  onPaginate(pageEvent: PageEvent) {
+    this.postPerPage = +pageEvent.pageSize;
+    this.currentPage = +pageEvent.pageIndex + 1;
+    this.updateTable();
+  }
+
+  updateTable() {
+    this._service.getRequests({
+      page: this.currentPage,
+      per_page: this.postPerPage
+    }).subscribe({
+      next: (response: any) => {
+        this.requests = response.data.map((record: any) => new RequestModel(record))
+        this.currentPage = response.current_page
+        this.itemsPerPage = parseInt(response.per_page)
+        this.totalItems = response.total
+        console.log(response)
+      },
+      error: (e) => {
+        console.log(e)
+      }
+    });
+  }
+
+  getFormFieldHelpersAsString(): string {
+    return this.formFieldHelpers.join(' ');
   }
 
 }

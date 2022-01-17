@@ -32,4 +32,10 @@ export abstract class BaseModel {
   requiredFields(): string[] {
     return []
   };
+
+  forEach(callback: (key: string, value: any) => void): void {
+    this.fields().forEach(key => {
+      callback(key, this[key]);
+    });
+  }
 }

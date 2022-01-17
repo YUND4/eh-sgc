@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector       : 'request-invoice',
@@ -10,11 +12,21 @@ export class RequestInvoiceComponent
 {
 
   hidden: boolean = true;
+  requestId: number =  0;
+  routeSubscriber: Subscription;
     /**
      * Constructor
      */
-    constructor()
-    {
+    constructor(private route: ActivatedRoute) {}
+
+    ngOnInit() {
+      this.routeSubscriber = this.route.params.subscribe(params => {
+        this.requestId = params['id']
+      });
+    }
+
+    ngOnDestroy() {
+      this.routeSubscriber.unsubscribe();
     }
 
     printPage(): void {

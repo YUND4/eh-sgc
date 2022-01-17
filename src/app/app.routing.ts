@@ -86,9 +86,9 @@ export const appRoutes: Route[] = [
           { path: 'list/sgc', loadChildren: () => import('app/modules/request/list/sgc/request-list-sgc.module').then(m => m.RequestListSGCModule) },
           { path: 'list/sci', loadChildren: () => import('app/modules/request/list/sci/request-list-sci.module').then(m => m.RequestListSCIModule) },
           { path: 'detail', loadChildren: () => import('app/modules/request/detail/request-detail.module').then(m => m.RequestDetailModule) },
-          { path: 'trace/sgc', loadChildren: () => import('app/modules/request/trace/sgc/request-trace-sgc.module').then(m => m.RequestTraceSGCModule) },
-          { path: 'trace/sci', loadChildren: () => import('app/modules/request/trace/sci/request-trace-sci.module').then(m => m.RequestTraceSCIModule) },
-          { path: 'invoice', loadChildren: () => import('app/modules/request/invoice/request-invoice.module').then(m => m.RequestInvoiceModule) },
+          { path: 'trace/sgc/:id', loadChildren: () => import('app/modules/request/trace/sgc/request-trace-sgc.module').then(m => m.RequestTraceSGCModule) },
+          { path: 'trace/sci/:id', loadChildren: () => import('app/modules/request/trace/sci/request-trace-sci.module').then(m => m.RequestTraceSCIModule) },
+          { path: 'invoice/:id', loadChildren: () => import('app/modules/request/invoice/request-invoice.module').then(m => m.RequestInvoiceModule) },
         ],
       },
       {

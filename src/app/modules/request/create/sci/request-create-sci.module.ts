@@ -20,6 +20,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BaseInterceptor } from 'app/shared/base/base.interceptor';
 import { RequestService } from 'app/shared/services/request.service';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export const routes: Route[] = [
     {
@@ -50,7 +51,8 @@ export const routes: Route[] = [
         MaterialFileInputModule,
         FuseHighlightModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        NgxMatSelectSearchModule
     ],
     providers: [
       RequestService,

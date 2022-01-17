@@ -33,6 +33,7 @@
         "moment": "2.29.1",
         "ng-apexcharts": "1.5.12",
         "ngx-markdown": "13.0.0",
+        "ngx-mat-select-search": "^4.0.0",
         "ngx-material-file-input": "^3.0.0",
         "ngx-quill": "16.0.1",
         "perfect-scrollbar": "1.5.3",

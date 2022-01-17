@@ -13,7 +13,7 @@ export class RequestModel extends BaseModel {
   request_code: string;
   evidence_description: string;
   request_description: string;
-  evidence_file_path: string;
+  evidence_file: any;
   request_type: string;
   status: string;
   id: number;

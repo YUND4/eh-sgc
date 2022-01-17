@@ -10,12 +10,12 @@ export class TrackingService
   constructor(private _http: HttpClient) {
   }
 
-  getTrackings() {
-    return this._http.get<TrackingModel[]>(`${BASE_URL}/api/tracking/`);
+  getTrackings(id: number) {
+    return this._http.get<TrackingModel[]>(`${BASE_URL}/api/tracking?request_id=${id}`);
   }
 
   createTracking(data: TrackingModel) {
-    return this._http.post<TrackingModel>(`${BASE_URL}/api/tracking/create`, { 'request': data });
+    return this._http.post<TrackingModel>(`${BASE_URL}/api/tracking/create`, { 'tracking': data });
   }
 
 }
