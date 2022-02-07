@@ -21,6 +21,11 @@ import { RequestService } from 'app/shared/services/request.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseInterceptor } from 'app/shared/base/base.interceptor';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { UserService } from 'app/shared/services/users.service';
+import { SelectableService } from 'app/shared/services/selectable.service';
+import { QuillModule } from 'ngx-quill';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export const routes: Route[] = [
     {
@@ -51,10 +56,24 @@ export const routes: Route[] = [
         FuseHighlightModule,
         SharedModule,
         FormsModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        MatAutocompleteModule,
+        QuillModule.forRoot({
+          modules: {
+            syntax: true,
+            toolbar: [
+              ['bold', 'italic', 'underline'],
+              [{align: []}, {list: 'ordered'}, {list: 'bullet'}],
+              ['clean']
+            ]
+          }
+        }),
+        MatDialogModule
     ],
     providers: [
       RequestService,
+      UserService,
+      SelectableService,
       { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })

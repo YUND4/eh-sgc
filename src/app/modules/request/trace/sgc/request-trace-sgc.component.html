@@ -30,24 +30,29 @@
 
       <!-- Vertical stepper -->
 
-      <form class="p-4 bg-card shadow rounded overflow-hidden" [formGroup]="verticalStepperForm">
-        <mat-vertical-stepper [linear]="true" #verticalStepper>
-          <mat-step [formGroupName]="'step1'" [stepControl]="verticalStepperForm.get('step1')">
+      <form class="p-4 bg-card shadow rounded overflow-hidden" [formGroup]="formControl">
+        <mat-vertical-stepper [linear]="true" #stepper>
+          <mat-step [formGroupName]="'step1'" [stepControl]="formControl.get('step1')">
             <ng-template matStepLabel>Equipo de trabajo</ng-template>
             <div class="w-full">
               <div class="w-full">
                 <p class="pb-5">Lider</p>
                 <mat-form-field class="w-1/3 pl-2">
                   <mat-label>Nombre</mat-label>
-                  <input matInput />
+                  <input matInput name="lead_name" formControlName="lead_name" [matAutocomplete]="auto0" (input)="onChangeFilter('lead_name', 'user', '1')"/>
+                  <mat-autocomplete #auto0="matAutocomplete" [displayWith]="displayUser">
+                    <ng-container>
+                      <mat-option *ngFor="let user of selectables['lead_name']" [value]="user" (click)="onClickUser('lead_name', '1')">{{user.name}}</mat-option>
+                    </ng-container>
+                  </mat-autocomplete>
                 </mat-form-field>
                 <mat-form-field class="w-1/3 pl-2">
                   <mat-label>Area</mat-label>
-                  <input matInput />
+                  <input matInput name="lead_area" formControlName="lead_area"/>
                 </mat-form-field>
                 <mat-form-field class="w-1/3 pl-2">
                   <mat-label>Cargo</mat-label>
-                  <input matInput />
+                  <input matInput name="lead_position" formControlName="lead_position"/>
                 </mat-form-field>
               </div>
               <div class="flex justify-end">
@@ -62,80 +67,86 @@
                 <p class="pb-5">Integrante {{i}}</p>
                 <mat-form-field class="w-1/3 pl-2">
                   <mat-label>Nombre</mat-label>
-                  <input matInput />
+                  <input matInput [name]="('user_name_'+i)" [id]="('user_name_'+i)" [formControlName]="('user_name_'+i)" [matAutocomplete]="auto1" (input)="onChangeFilter('user_name_'+i, 'user', '1')"/>
+                  <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayUser">
+                    <ng-container>
+                      <mat-option *ngFor="let user of selectables['user_name_'+i]" [value]="user" (click)="onClickUser('user_name_'+i, '1')">{{user.name}}</mat-option>
+                    </ng-container>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="w-1/3 pl-2">
+                  <mat-label>Area</mat-label>
+                  <input matInput [name]="('user_area_'+i)" [id]="('user_area_'+i)" [formControlName]="('user_area_'+i)"/>
                 </mat-form-field>
                 <mat-form-field class="w-1/3 pl-2">
                   <mat-label>Cargo</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/3 pl-2">
-                  <mat-label>Causa</mat-label>
-                  <input matInput />
+                  <input matInput [name]="('user_position_'+i)" [id]="('user_position_'+i)" [formControlName]="('user_position_'+i)"  />
                 </mat-form-field>
               </div>
             </div>
             <div class="flex justify-end">
-              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="doneStep1()">
                 Siguiente
               </button>
             </div>
           </mat-step>
 
-          <mat-step [formGroupName]="'step2'" [stepControl]="verticalStepperForm.get('step2')">
+          <mat-step [formGroupName]="'step2'" [stepControl]="formControl.get('step2')">
             <ng-template matStepLabel>Accion correctiva Inmediata</ng-template>
             <div class="flex justify-end mt-5">
-              <button mat-icon-button (click)="removeCauses(upgradePlan)">
+              <button mat-icon-button (click)="removeCauses(upgradePlanI)">
                 <mat-icon [svgIcon]="'heroicons_outline:minus-sm'" class="mr-2"></mat-icon>
               </button>
-              <button mat-icon-button (click)="addCauses(upgradePlan)">
+              <button mat-icon-button (click)="addCauses(upgradePlanI)">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
               </button>
             </div>
             <mat-tab-group class="mt-5">
-              <mat-tab *ngFor="let value of upgradePlan" [label]="'Accion Correctiva ' + value">
+              <mat-tab *ngFor="let i of upgradePlanI" [label]="'Accion Correctiva ' + i">
                 <div class="w-full">
                   <mat-form-field class="w-1/2 pr-4">
                     <mat-label>Descripcion breve de la accion correctiva</mat-label>
-                    <input matInput>
+                    <input matInput [name]="('goal_description_'+i)" [id]="('goal_description_'+i)" [formControlName]="('goal_description_'+i)">
                   </mat-form-field>
                   <mat-form-field class="w-1/2">
                     <mat-label>Nombre del responsable</mat-label>
-                    <input matInput>
+                    <input matInput [name]="('person_assigned_'+i)" [id]="('person_assigned_'+i)" [formControlName]="('person_assigned_'+i)">
                   </mat-form-field>
                 </div>
                 <div class="w-full">
                   <mat-form-field class="w-1/3 pr-4">
                     <mat-label>Fecha inicio</mat-label>
-                    <input matInput [matDatepicker]="picker1">
+                    <input matInput [matDatepicker]="picker1" [name]="('init_date_'+i)" [id]="('init_date_'+i)" [formControlName]="('init_date_'+i)">
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker>
+                    <mat-datepicker #picker1 ></mat-datepicker>
                   </mat-form-field>
                   <mat-form-field class="w-1/3 pr-4">
                     <mat-label>Fecha fin</mat-label>
-                    <input matInput [matDatepicker]="picker2">
+                    <input matInput [matDatepicker]="picker2" [name]="('end_date_'+i)" [id]="('end_date_'+i)" [formControlName]="('end_date_'+i)">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                   </mat-form-field>
                   <mat-form-field class="w-1/3">
                     <mat-label>Plazo semana</mat-label>
-                    <input matInput>
+                    <input matInput [name]="('unit_measurement_'+i)" [id]="('unit_measurement_'+i)" [formControlName]="('unit_measurement_'+i)">
                   </mat-form-field>
                 </div>
                 <div class="w-full">
-                  <mat-form-field class="w-full ">
-                    <mat-label>Seguimiento</mat-label>
-                    <textarea matInput></textarea>
-                  </mat-form-field>
+                  <mat-label>Seguimiento</mat-label>
+                    <quill-editor
+                    [name]="('follow_process_description_'+i)" [id]="('follow_process_description_'+i)" [formControlName]="('follow_process_description_'+i)"
+                      [styles]="{height: '400px'}"></quill-editor>
+
                 </div>
                 <div class="w-full">
                   <mat-form-field class="w-2/3 pr-4">
-                    <mat-label>Evidencia</mat-label>
-                    <ngx-mat-file-input formControlName="basicfile" placeholder="Basic Input"></ngx-mat-file-input>
+                    <mat-label [id]="('evidence_file_'+i)">Evidencia</mat-label>
+                    <ngx-mat-file-input [name]="('evidence_file_'+i)" [formControlName]="('evidence_file_'+i)" (change)="onChangeFileI('2', 'evidence_file_'+i)"></ngx-mat-file-input>
                     <mat-icon matSuffix>folder</mat-icon>
                   </mat-form-field>
                   <mat-form-field class="w-1/3">
                     <mat-label>Avance</mat-label>
-                    <input matInput>
+                    <input matInput type="number" [name]="('percentage_'+i)" [id]="('percentage_'+i)" [formControlName]="('percentage_'+i)">
                   </mat-form-field>
                 </div>
               </mat-tab>
@@ -144,28 +155,28 @@
               <button class="px-8 mr-2" mat-flat-button type="button" matStepperPrevious>
                 Atras
               </button>
-              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="doneStep2()">
                 Siguiente
               </button>
             </div>
           </mat-step>
 
-          <mat-step [formGroupName]="'step3'" [stepControl]="verticalStepperForm.get('step3')">
+          <mat-step [formGroupName]="'step3'" [stepControl]="formControl.get('step3')">
             <ng-template matStepLabel>Analisis de causas</ng-template>
             <div class="flex w-full p-5">
               <mat-form-field class="w-1/2 pl-2">
                 <mat-label>1 ¿Fue entendido el problema y es claro?</mat-label>
-                <mat-select>
-                  <ng-container *ngFor="let color of ['Si', 'No', 'N/A']">
-                    <mat-option [value]="color">{{color | titlecase}}</mat-option>
+                <mat-select name="problem_understand" formControlName="problem_understand">
+                  <ng-container *ngFor="let value of ['Si', 'No', 'N/A']">
+                    <mat-option [value]="value">{{value | titlecase}}</mat-option>
                   </ng-container>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="w-1/2 pl-2">
                 <mat-label>2 ¿Fue a sitio, observó, entrevistó?</mat-label>
-                <mat-select>
-                  <ng-container *ngFor="let color of ['Si', 'No', 'N/A']">
-                    <mat-option [value]="color">{{color | titlecase}}</mat-option>
+                <mat-select name="local_revision" formControlName="local_revision">
+                  <ng-container *ngFor="let value of ['Si', 'No', 'N/A']">
+                    <mat-option [value]="value">{{value | titlecase}}</mat-option>
                   </ng-container>
                 </mat-select>
               </mat-form-field>
@@ -173,18 +184,18 @@
             <div class="flex w-full p-5">
               <mat-form-field class="w-1/2 pl-2">
                 <mat-label>3 ¿Se revisaron los datos existentes sobre el problema?</mat-label>
-                <mat-select>
-                  <ng-container *ngFor="let color of ['Si', 'No', 'N/A']">
-                    <mat-option [value]="color">{{color | titlecase}}</mat-option>
+                <mat-select name="data_review" formControlName="data_review">
+                  <ng-container *ngFor="let value of ['Si', 'No', 'N/A']">
+                    <mat-option [value]="value">{{value | titlecase}}</mat-option>
                   </ng-container>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="w-1/2 pl-2">
                 <mat-label>4 ¿Al evaluar la recopilación de información (1,2,3) considera suficiente para entablar
                   juicio de las posibles causas?</mat-label>
-                <mat-select>
-                  <ng-container *ngFor="let color of ['Si', 'No', 'N/A']">
-                    <mat-option [value]="color">{{color | titlecase}}</mat-option>
+                <mat-select name="viability_test" formControlName="viability_test">
+                  <ng-container *ngFor="let value of ['Si', 'No', 'N/A']">
+                    <mat-option [value]="value">{{value | titlecase}}</mat-option>
                   </ng-container>
                 </mat-select>
               </mat-form-field>
@@ -194,7 +205,7 @@
                 <div class="w-full">
                   <mat-form-field class="w-full pl-2" *ngFor="let i of item.value">
                     <mat-label>Causa {{i}}</mat-label>
-                    <textarea matInput></textarea>
+                    <textarea matInput [name]="('cause_'+getLengthCauses(item.key)+'_'+i)" [id]="('cause_'+getLengthCauses(item.key)+'_'+i)" [formControlName]="('cause_'+getLengthCauses(item.key)+'_'+i)"></textarea>
                   </mat-form-field>
                   <div class="flex justify-end">
                     <button mat-icon-button (click)="removeCauses(item.value)">
@@ -207,72 +218,75 @@
                 </div>
                 <mat-form-field class="w-full pl-2">
                   <mat-label>Resultado del Analisis</mat-label>
-                  <textarea matInput></textarea>
+                  <textarea matInput [name]="('analysis_result_'+getLengthCauses(item.key))" [id]="('analysis_result_'+getLengthCauses(item.key))" [formControlName]="('analysis_result_'+getLengthCauses(item.key))"></textarea>
                 </mat-form-field>
               </mat-tab>
             </mat-tab-group>
             <div class="flex justify-end">
-              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+              <button class="px-8 mr-2" mat-flat-button type="button" matStepperPrevious>
+                Atras
+              </button>
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="doneStep3()">
                 Siguiente
               </button>
             </div>
           </mat-step>
 
-          <mat-step [formGroupName]="'step4'" [stepControl]="verticalStepperForm.get('step4')">
+          <mat-step [formGroupName]="'step4'" [stepControl]="formControl.get('step4')">
             <ng-template matStepLabel>Accion correctiva Definitiva</ng-template>
             <div class="flex justify-end mt-5">
-              <button mat-icon-button (click)="removeCauses(upgradePlan)">
+              <button mat-icon-button (click)="removeCauses(upgradePlanD)">
                 <mat-icon [svgIcon]="'heroicons_outline:minus-sm'" class="mr-2"></mat-icon>
               </button>
-              <button mat-icon-button (click)="addCauses(upgradePlan)">
+              <button mat-icon-button (click)="addCauses(upgradePlanD)">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
               </button>
             </div>
             <mat-tab-group class="mt-5">
-              <mat-tab *ngFor="let value of upgradePlan" [label]="'Accion Correctiva ' + value">
+              <mat-tab *ngFor="let i of upgradePlanD" [label]="'Accion Correctiva ' + i">
                 <div class="w-full">
                   <mat-form-field class="w-1/2 pr-4">
                     <mat-label>Descripcion breve de la accion correctiva</mat-label>
-                    <input matInput>
+                    <input matInput [name]="('goal_description_'+i)" [id]="('goal_description_'+i)" [formControlName]="('goal_description_'+i)">
                   </mat-form-field>
                   <mat-form-field class="w-1/2">
                     <mat-label>Nombre del responsable</mat-label>
-                    <input matInput>
+                    <input matInput [name]="('person_assigned_'+i)" [id]="('person_assigned_'+i)" [formControlName]="('person_assigned_'+i)">
                   </mat-form-field>
                 </div>
                 <div class="w-full">
                   <mat-form-field class="w-1/3 pr-4">
                     <mat-label>Fecha inicio</mat-label>
-                    <input matInput [matDatepicker]="picker1">
-                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker>
+                    <input matInput [matDatepicker]="picker3" [name]="('init_date_'+i)" [id]="('init_date_'+i)" [formControlName]="('init_date_'+i)">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3 ></mat-datepicker>
                   </mat-form-field>
                   <mat-form-field class="w-1/3 pr-4">
                     <mat-label>Fecha fin</mat-label>
-                    <input matInput [matDatepicker]="picker2">
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
+                    <input matInput [matDatepicker]="picker4" [name]="('end_date_'+i)" [id]="('end_date_'+i)" [formControlName]="('end_date_'+i)">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
                   </mat-form-field>
                   <mat-form-field class="w-1/3">
                     <mat-label>Plazo semana</mat-label>
-                    <input matInput>
+                    <input matInput [name]="('unit_measurement_'+i)" [id]="('unit_measurement_'+i)" [formControlName]="('unit_measurement_'+i)">
                   </mat-form-field>
                 </div>
                 <div class="w-full">
                   <mat-form-field class="w-full ">
                     <mat-label>Seguimiento</mat-label>
-                    <textarea matInput></textarea>
+                    <textarea matInput [name]="('follow_process_description_'+i)" [id]="('follow_process_description_'+i)" [formControlName]="('follow_process_description_'+i)"></textarea>
                   </mat-form-field>
                 </div>
                 <div class="w-full">
                   <mat-form-field class="w-2/3 pr-4">
-                    <mat-label>Evidencia</mat-label>
-                    <ngx-mat-file-input formControlName="basicfile" placeholder="Basic Input"></ngx-mat-file-input>
+                    <mat-label [id]="('evidence_file_'+i)">Evidencia</mat-label>
+                    <ngx-mat-file-input [name]="('evidence_file_'+i)" [formControlName]="('evidence_file_'+i)" (change)="onChangeFileD('2', 'evidence_file_'+i)"></ngx-mat-file-input>
                     <mat-icon matSuffix>folder</mat-icon>
                   </mat-form-field>
                   <mat-form-field class="w-1/3">
                     <mat-label>Avance</mat-label>
-                    <input matInput>
+                    <input matInput type="number" [name]="('percentage_'+i)" [id]="('percentage_'+i)" [formControlName]="('percentage_'+i)">
                   </mat-form-field>
                 </div>
               </mat-tab>
@@ -281,146 +295,31 @@
               <button class="px-8 mr-2" mat-flat-button type="button" matStepperPrevious>
                 Atras
               </button>
-              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="doneStep4()">
                 Siguiente
               </button>
             </div>
           </mat-step>
 
-          <mat-step [formGroupName]="'step5'" [stepControl]="verticalStepperForm.get('step5')">
-            <ng-template matStepLabel>Mecanismos de estandarizacion y comunicación</ng-template>
-            <div class="w-full">
-              <div class="flex justify-end">
-                <button mat-icon-button (click)="removeCauses(standard1)">
-                  <mat-icon [svgIcon]="'heroicons_outline:minus-sm'" class="mr-2"></mat-icon>
-                </button>
-                <button mat-icon-button (click)="addCauses(standard1)">
-                  <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
-                </button>
-              </div>
-              <p class="pb-5">Actividades de estandarizacion</p>
-              <div class="w-full" *ngFor="let i of standard1">
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Que</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Responsable</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Seguimiento</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Avance</mat-label>
-                  <input matInput />
-                </mat-form-field>
-              </div>
-              <div class="flex justify-end">
-                <button mat-icon-button (click)="removeCauses(standard2)">
-                  <mat-icon [svgIcon]="'heroicons_outline:minus-sm'" class="mr-2"></mat-icon>
-                </button>
-                <button mat-icon-button (click)="addCauses(standard2)">
-                  <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
-                </button>
-              </div>
-              <p class="pb-5">Actividades de comunicación</p>
-              <div class="w-full" *ngFor="let i of standard2">
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Que</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Responsable</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Seguimiento</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-1/4 pl-2">
-                  <mat-label>Avance</mat-label>
-                  <input matInput />
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="flex w-full">
-              <div class="w-1/3">
-                <span class="font-semibold pb-2">By Email</span>
-                <mat-checkbox class="w-full p-6" [checked]="true" [color]="'primary'">
-                  Indicador
-                </mat-checkbox>
-                <mat-checkbox class="w-full p-6" [color]="'primary'">
-                  Evento
-                </mat-checkbox>
-                <mat-checkbox class="w-full p-6" [checked]="true" [color]="'primary'">
-                  Tiempo
-                </mat-checkbox>
-              </div>
-              <div class="w-1/3">
-                <mat-form-field class="w-full pr-10">
-                  <mat-label>Cual</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-full pr-10">
-                  <mat-label>Cual</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-full pr-10">
-                  <mat-label>Desde</mat-label>
-                  <input matInput [matDatepicker]="picker5">
-                  <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
-                  <mat-datepicker #picker5></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="w-1/3">
-                <mat-form-field class="w-full pr-10">
-                  <mat-label>Objetivo</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-full pr-10">
-                  <mat-label>Objetivo</mat-label>
-                  <input matInput />
-                </mat-form-field>
-                <mat-form-field class="w-full pr-10">
-                  <mat-label>Hasta</mat-label>
-                  <input matInput [matDatepicker]="picker4">
-                  <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-                  <mat-datepicker #picker4></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </div>
-            <mat-form-field class="w-full pr-10">
-              <mat-label>Observaciones</mat-label>
-              <textarea matInput></textarea>
-            </mat-form-field>
-            <div class="flex justify-end">
-              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
-                Siguiente
-              </button>
-            </div>
-          </mat-step>
-
-          <mat-step [formGroupName]="'step6'" [stepControl]="verticalStepperForm.get('step6')">
+          <mat-step [formGroupName]="'step5'" [stepControl]="formControl.get('step5')">
             <ng-template matStepLabel>Resultados de seguimiento y cierre de la accion</ng-template>
             <div class="flex-auto w-full mt-5">
               <div class="w-full">
                 <mat-form-field class="w-1/3 pr-2">
                   <mat-label>Fecha de evaluacion</mat-label>
-                  <input matInput [matDatepicker]="picker6">
+                  <input matInput [matDatepicker]="picker6" name="tracking_date" formControlName="tracking_date">
                   <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
                   <mat-datepicker #picker6></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field class="w-1/3 pr-2">
                   <mat-label>Desde</mat-label>
-                  <input matInput [matDatepicker]="picker7">
+                  <input matInput [matDatepicker]="picker7" name="tracking_date_period_init" formControlName="tracking_date_period_init">
                   <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
                   <mat-datepicker #picker7></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field class="w-1/3 pr-2">
                   <mat-label>Hasta</mat-label>
-                  <input matInput [matDatepicker]="picker8">
+                  <input matInput [matDatepicker]="picker8" name="tracking_date_period_end" formControlName="tracking_date_period_end">
                   <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
                   <mat-datepicker #picker8></mat-datepicker>
                 </mat-form-field>
@@ -428,35 +327,35 @@
               <div class="w-full">
                 <mat-form-field class="w-full">
                   <mat-label>Analisis de datos basado en</mat-label>
-                  <textarea matInput></textarea>
+                  <textarea matInput name="result_analysis" formControlName="result_analysis"></textarea>
                 </mat-form-field>
               </div>
               <div class="w-full">
                 <mat-form-field class="w-1/5 pr-2">
                   <mat-label>Objetivo</mat-label>
-                  <input matInput/>
+                  <input matInput name="objective" formControlName="objective"/>
                 </mat-form-field>
                 <mat-form-field class="w-1/5 pr-2">
                   <mat-label>Total evaluado</mat-label>
-                  <input matInput/>
+                  <input matInput type="number" name="total_review" formControlName="total_review"/>
                 </mat-form-field>
                 <mat-form-field class="w-1/5 pr-2">
                   <mat-label>Total conformes</mat-label>
-                  <input matInput/>
+                  <input matInput type="number" name="total_agree" formControlName="total_agree"/>
                 </mat-form-field>
                 <mat-form-field class="w-1/5 pr-2">
                   <mat-label>Total no conformes</mat-label>
-                  <input matInput/>
+                  <input matInput name="total_disagree" formControlName="total_disagre"/>
                 </mat-form-field>
                 <mat-form-field class="w-1/5 pr-2">
                   <mat-label>Cumplimiento</mat-label>
-                  <input matInput/>
+                  <input matInput name="agree" formControlName="agree"/>
                 </mat-form-field>
               </div>
               <div class="w-full">
                 <mat-form-field class="w-2/3 pr-4">
                   <mat-label>Quien realiza el cierre</mat-label>
-                  <mat-select>
+                  <mat-select name="user_tracking_name" formControlName="user_tracking_name">
                     <ng-container *ngFor="let color of ['Leidy Bernate', 'Alexander Padilla']">
                       <mat-option [value]="color">{{color | titlecase}}</mat-option>
                     </ng-container>
@@ -464,14 +363,14 @@
                 </mat-form-field>
                 <mat-form-field class="w-1/3">
                   <mat-label>Fecha de seguimiento</mat-label>
-                  <input matInput [matDatepicker]="picker3">
+                  <input matInput [matDatepicker]="picker3" name="created_at" formControlName="created_at">
                   <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                   <mat-datepicker #picker3></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
             <div class="flex justify-end mt-8">
-              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="doneStep5()">
                 Completar seguimiento
               </button>
             </div>

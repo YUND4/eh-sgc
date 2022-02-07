@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { BASE_URL } from 'app/shared/constants/api.constants';
 
 @Injectable()
 export class AuthService
@@ -73,11 +74,11 @@ export class AuthService
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        return this._httpClient.post(`${BASE_URL}/api/auth/login`, credentials).pipe(
             switchMap((response: any) => {
 
                 // Store the access token in the local storage
-                this.accessToken = response.accessToken;
+                this.accessToken = response.access_token;
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
@@ -97,8 +98,10 @@ export class AuthService
     signInUsingToken(): Observable<any>
     {
         // Renew token
-        return this._httpClient.post('api/auth/refresh-access-token', {
-            accessToken: this.accessToken
+        return this._httpClient.post(`${BASE_URL}/api/auth/refresh`, {}, {
+          headers: {
+            Authorization: 'Bearer ' + this.accessToken
+          }
         }).pipe(
             catchError(() =>
 
@@ -108,7 +111,7 @@ export class AuthService
             switchMap((response: any) => {
 
                 // Store the access token in the local storage
-                this.accessToken = response.accessToken;
+                this.accessToken = response.access_token;
 
                 // Set the authenticated flag to true
                 this._authenticated = true;

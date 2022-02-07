@@ -13,20 +13,16 @@ export class RequestInvoiceComponent
 
   hidden: boolean = true;
   requestId: number =  0;
-  routeSubscriber: Subscription;
     /**
      * Constructor
      */
-    constructor(private route: ActivatedRoute) {}
-
-    ngOnInit() {
-      this.routeSubscriber = this.route.params.subscribe(params => {
+    constructor(private route: ActivatedRoute) {
+      this.route.params.subscribe(params => {
         this.requestId = params['id']
       });
     }
 
-    ngOnDestroy() {
-      this.routeSubscriber.unsubscribe();
+    ngOnInit() {
     }
 
     printPage(): void {

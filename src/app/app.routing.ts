@@ -96,6 +96,7 @@ export const appRoutes: Route[] = [
           { path: 'by_date', loadChildren: () => import('app/modules/report/by-date/report-by-date.module').then(m => m.ReportByDateModule) },
         ],
       },
+      { path: 'settings', loadChildren: () => import('app/modules/settings/settings.module').then(m => m.SettingsModule) },
     ],
   }
 ];

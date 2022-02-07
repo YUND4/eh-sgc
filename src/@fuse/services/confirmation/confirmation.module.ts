@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 import { FuseConfirmationDialogComponent } from '@fuse/services/confirmation/dialog/dialog.component';
 import { CommonModule } from '@angular/common';
+import { AlertService } from '../../../app/shared/services/dialog.service';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { CommonModule } from '@angular/common';
         CommonModule
     ],
     providers   : [
-        FuseConfirmationService
+        FuseConfirmationService,
+        AlertService
     ]
 })
 export class FuseConfirmationModule

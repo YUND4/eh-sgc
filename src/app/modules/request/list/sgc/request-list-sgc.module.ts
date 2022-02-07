@@ -11,10 +11,12 @@ import { BaseInterceptor } from 'app/shared/base/base.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TrackingModule } from 'app/modules/tracking/tracking.module';
+import { UserService } from '../../../../core/user/user.service';
+import { MatSelectModule } from '@angular/material/select';
 
 export const routes: Route[] = [
   {
@@ -39,9 +41,12 @@ export const routes: Route[] = [
     MatInputModule,
     FormsModule,
     MatDialogModule,
-    TrackingModule
+    TrackingModule,
+    ReactiveFormsModule,
+    MatSelectModule,
   ],
   providers: [
+    UserService,
     RequestService,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],

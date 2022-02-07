@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { String } from 'lodash';
 import { RequestModel } from '../../../../shared/models/request.model';
 import { RequestService } from 'app/shared/services/request.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { TrackingComponent } from 'app/modules/tracking/tracking.component';
+import { Router } from '@angular/router';
+import { UserService } from '../../../../core/user/user.service';
 
 export interface PeriodicElement {
   id: number;
@@ -40,8 +44,21 @@ export class RequestListSCIComponent implements OnInit {
   itemsPerPage: number = 10;
   currentPage: number = 0;
   postPerPage: number = 0;
+  isAdmin: boolean = false;
+  searchFormControl: FormGroup;
 
-  constructor(private _service: RequestService, private _formBuilder: FormBuilder,) { }
+  constructor(
+    private _service: RequestService,
+    private _formBuilder: FormBuilder,
+    private _router: Router,
+    private _dialog: MatDialog,
+    private _userService: UserService) {
+      this.searchFormControl = _formBuilder.group({
+        search: [''],
+        status: ['Todos']
+      })
+    }
+
 
   ngOnInit(): void {
     this.updateTable();
@@ -55,6 +72,7 @@ export class RequestListSCIComponent implements OnInit {
 
   updateTable() {
     this._service.getRequests({
+      request_type: 'sci',
       page: this.currentPage,
       per_page: this.postPerPage
     }).subscribe({
@@ -73,6 +91,22 @@ export class RequestListSCIComponent implements OnInit {
 
   getFormFieldHelpersAsString(): string {
     return this.formFieldHelpers.join(' ');
+  }
+
+  openDialog(record: RequestModel): void {
+
+    const dialogRef = this._dialog.open(TrackingComponent, {
+      width: '900px',
+      data: record
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  followDetail(): void {
+    this._router.navigateByUrl(`/request/detail`)
   }
 
 }

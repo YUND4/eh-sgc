@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
 import { User } from 'app/core/user/user.types';
+import { BASE_URL } from 'app/shared/constants/api.constants';
 
 @Injectable({
     providedIn: 'root'
@@ -46,9 +47,9 @@ export class UserService
      */
     get(): Observable<User>
     {
-        return this._httpClient.get<User>('api/common/user').pipe(
-            tap((user) => {
-                this._user.next(user);
+        return this._httpClient.get<User>(`${BASE_URL}/api/user/me`).pipe(
+            tap((response) => {
+                this._user.next(response['data']);
             })
         );
     }

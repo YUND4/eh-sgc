@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Seleccionable</h1>
+<mat-dialog-content>
+
+
+
+
+  <!-- Main -->
+  <div class="w-full flex-auto p-6 sm:p-10">
+
+    <form [formGroup]="selectableFormControl">
+
+        <!-- Title -->
+        <div class="w-full">
+          <mat-form-field class="w-1/2 pr-3">
+              <mat-label>Codigo</mat-label>
+              <input matInput name="code" formControlName="code">
+          </mat-form-field>
+          <mat-form-field class="w-1/2 pr-3">
+              <mat-label>Descripcion</mat-label>
+              <input matInput name="description" formControlName="description">
+          </mat-form-field>
+        </div>
+
+    </form>
+
+
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button mat-button cdkFocusInitial class="bg-primary text-white" (click)="createUpdateSelectable()">Guardar</button>
+</mat-dialog-actions>

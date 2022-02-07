@@ -4,6 +4,7 @@ import { TrackingService } from '../../shared/services/tracking.service';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { RequestModel } from '../../shared/models/request.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-tracking',
@@ -21,7 +22,8 @@ export class TrackingComponent implements OnInit {
     private _service: TrackingService,
     @Inject(MAT_DIALOG_DATA) private _data: RequestModel,
     private _router: Router,
-    private _dialog: MatDialog) {
+    private _dialog: MatDialog,
+    private snackBar: MatSnackBar) {
     this.loadTrackings()
   }
 
@@ -47,25 +49,37 @@ export class TrackingComponent implements OnInit {
   }
 
   newTracking(): void {
-    this._service.createTracking(new TrackingModel({
-      request_id: this._data.id,
-      step_count: 3,
-      last_step_complete: 0
-    })).subscribe({
-      next: (response: any) => {
-        this.followTracking(response.data.id)
-        console.log(`New Request ${response}`)
-      },
-      error: (e) => {
-        console.log(e)
+    let viability = true
+    this.trackings.forEach((record) => {
+      if (record.status == 'open') {
+        viability =  false;
       }
     })
+    if (viability) {
+      this._service.createTracking(new TrackingModel({
+        request_id: this._data.id,
+        step_count: 6,
+        last_step_complete: 0
+      })).subscribe({
+        next: (response: any) => {
+          this.followTracking(response.data.id)
+          console.log(`New Request ${response}`)
+        },
+        error: (e) => {
+          console.log(e)
+        }
+      })
+    } else {
+        this.snackBar.open("No se pueden crear seguimientos nuevos si ya existe uno pendiente.", 'Entiendo', {
+          duration: 2000,
+        });
+    }
   }
 
   followTracking(id: number): void {
     this._dialog.closeAll()
     setTimeout(() => {
-      this._router.navigateByUrl(`/request/trace/${this._data.request_type}/${id}`)
+      this._router.navigateByUrl(`/request/trace/${this._data.request_type_code.toLowerCase()}/${id}`)
     }, 10);
   }
 

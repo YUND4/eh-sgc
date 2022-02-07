@@ -12,7 +12,7 @@ export class WizardService
   }
 
   completeStep(data: Object, step: number, module: string) {
-    return this._http.post(`${BASE_URL}/api/wizard/${module}/complete/${step}`, { 'request': data });
+    return this._http.post(`${BASE_URL}/api/wizard/${module}/complete/${step}`, data);
   }
 
 }

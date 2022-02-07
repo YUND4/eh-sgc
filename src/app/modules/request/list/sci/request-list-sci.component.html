@@ -68,11 +68,10 @@
             <button mat-icon-button color="primary" matTooltip="Ver detalle" class="mr-2">
               <mat-icon [svgIcon]="'heroicons_outline:information-circle'"></mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Hacer seguimiento" *ngIf="['lead', 'admin'].includes(element.role)"
-              class="mr-2">
+            <button mat-icon-button *ngIf="['open'].includes(element.status)" matTooltip="Hacer seguimiento" class="mr-2" (click)="openDialog(element)">
               <mat-icon class="text-green_eh" [svgIcon]="'heroicons_outline:cube-transparent'"></mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Finalizar seguimiento" *ngIf="['admin'].includes(element.role)">
+            <button mat-icon-button *ngIf="['ready_to_close'].includes(element.status) && isAdmin" matTooltip="Finalizar seguimiento" class="mr-2">
               <mat-icon class="text-orange_eh" [svgIcon]="'heroicons_outline:cube'"></mat-icon>
             </button>
           </div>

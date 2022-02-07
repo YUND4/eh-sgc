@@ -7,13 +7,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { SharedModule } from 'app/shared/shared.module';
 import { RequestTraceSGCComponent } from './request-trace-sgc.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { WizardService } from '../../../../shared/services/wizard.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BaseInterceptor } from 'app/shared/base/base.interceptor';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import * as core from '../../../../core/user/user.service';
+import * as service from '../../../../shared/services/users.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SelectableService } from '../../../../shared/services/selectable.service';
+import { QuillModule } from 'ngx-quill';
 
 
 export const routes: Route[] = [
@@ -41,7 +51,27 @@ export const routes: Route[] = [
         MatTabsModule,
         MaterialFileInputModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatSnackBarModule,
+        MatAutocompleteModule,
+        QuillModule.forRoot({
+          modules: {
+            syntax: true,
+            toolbar: [
+              ['bold', 'italic', 'underline'],
+              [{align: []}, {list: 'ordered'}, {list: 'bullet'}],
+              ['clean']
+            ]
+          }
+        }),
+    ],
+    providers: [
+      core.UserService,
+      service.UserService,
+      AuthService,
+      WizardService,
+      SelectableService,
+      { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })
 export class RequestTraceSGCModule

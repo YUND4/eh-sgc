@@ -11,12 +11,12 @@ export class RequestService
   constructor(private _http: HttpClient) {
   }
 
-  getRequests({ page = 1, per_page = 10 }: { page?: number; per_page?: number; }) {
-    return this._http.get(`${BASE_URL}/api/request?page=${page}&per_page=${per_page}`);
+  getRequests({ request_type, page = 1, per_page = 10 }: { request_type: string; page?: number; per_page?: number; }) {
+    return this._http.get(`${BASE_URL}/api/request?page=${page}&per_page=${per_page}&request_type=${request_type}`);
   }
 
   createRequest(data: RequestModel | FormData) {
-    return this._http.post(`${BASE_URL}/api/request/create`, { 'request': data });
+    return this._http.post(`${BASE_URL}/api/request/create`, { request: data });
   }
 
 }

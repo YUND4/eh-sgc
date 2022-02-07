@@ -47,29 +47,29 @@ export class RequestCreateSCIComponent {
     private _formBuilder: FormBuilder,
     private _router: Router,
     private _service: RequestService) {
-      this.requestFormControl = new FormGroup({
-        init_date: new FormControl(null, [ Validators.required ]),
-        detected_date: new FormControl(null, [ Validators.required ]),
-        detected_in: new FormControl(null, [ Validators.required ]),
-        detected_for_id: new FormControl(null, [ Validators.required ]),
-        unfulfilled_requirement: new FormControl(null, [ Validators.required ]),
-        process_lead_id: new FormControl(null, [ Validators.required ]),
-        process_affected: new FormControl(null, [ Validators.required ]),
-        how_detected: new FormControl(null, [ Validators.required ]),
-        action_type: new FormControl(null, [ Validators.required ]),
-        evidence_description: new FormControl(null, [ Validators.required ]),
-        request_description: new FormControl(null, [ Validators.required ]),
-        evidence_file: new FormControl(null, [ Validators.required ]),
+      this.requestFormControl = this._formBuilder.group({
+        init_date: [null, [ Validators.required ]],
+        detected_date: [null, [ Validators.required ]],
+        detected_in: [null, [ Validators.required ]],
+        detected_for_id: [null, [ Validators.required ]],
+        unfulfilled_requirement: [null, [ Validators.required ]],
+        process_lead_id: [null, [ Validators.required ]],
+        process_affected: [null, [ Validators.required ]],
+        how_detected: [null, [ Validators.required ]],
+        action_type: [null, [ Validators.required ]],
+        evidence_description: [null, [ Validators.required ]],
+        request_description: [null, [ Validators.required ]],
+        evidence_file: [null, [ Validators.required ]],
       });
-      this.selectFormControl = new FormGroup({
-        select_filter: new FormControl('')
+      this.selectFormControl = this._formBuilder.group({
+        select_filter: ['']
       });
-      this.codeFormControl = new FormGroup({
-        section1: new FormControl(null, [ Validators.required ]),
-        section2: new FormControl(null, [ Validators.required ]),
-        section3: new FormControl(null, [ Validators.required ]),
-        section4: new FormControl(null, [ Validators.required ]),
-        section5: new FormControl(null, [ Validators.required ])
+      this.codeFormControl = this._formBuilder.group({
+        section1: [null, [ Validators.required ]],
+        section2: [null, [ Validators.required ]],
+        section3: [null, [ Validators.required ]],
+        section4: [null, [ Validators.required ]],
+        section5: [null, [ Validators.required ]]
       })
       this.loadSelectOptions()
   }
@@ -142,7 +142,7 @@ export class RequestCreateSCIComponent {
       console.log(code)
       model.request_code = code
       model.evidence_file = this.base64File;
-      model.request_type = 'sci'
+      model.request_type_code = 'SCI'
       this._service.createRequest(model)
       .subscribe({
         next: (v)  => {

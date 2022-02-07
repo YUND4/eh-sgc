@@ -15,7 +15,7 @@ export class TrackingService
   }
 
   createTracking(data: TrackingModel) {
-    return this._http.post<TrackingModel>(`${BASE_URL}/api/tracking/create`, { 'tracking': data });
+    return this._http.post<TrackingModel>(`${BASE_URL}/api/tracking/create`, { tracking: data });
   }
 
 }

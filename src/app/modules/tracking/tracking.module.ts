@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseInterceptor } from 'app/shared/base/base.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -20,7 +21,8 @@ import { BaseInterceptor } from 'app/shared/base/base.interceptor';
     MatDialogModule,
     MatButtonModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers:[
     TrackingService,

@@ -13,6 +13,9 @@ import { FormsModule } from '@angular/forms';
 import { RequestService } from 'app/shared/services/request.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseInterceptor } from 'app/shared/base/base.interceptor';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TrackingModule } from 'app/modules/tracking/tracking.module';
+import { UserService } from '../../../../core/user/user.service';
 
 export const routes: Route[] = [
   {
@@ -35,9 +38,12 @@ export const routes: Route[] = [
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    TrackingModule
   ],
   providers: [
+    UserService,
     RequestService,
     { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
   ],

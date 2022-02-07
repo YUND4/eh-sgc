@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { BaseInterceptor } from 'app/shared/base/base.interceptor';
 import { RequestService } from 'app/shared/services/request.service';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { UserService } from 'app/shared/services/users.service';
 
 export const routes: Route[] = [
     {
@@ -56,6 +57,7 @@ export const routes: Route[] = [
     ],
     providers: [
       RequestService,
+      UserService,
       { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })
