@@ -26,6 +26,7 @@ import { UserService } from 'app/shared/services/users.service';
 import { SelectableService } from 'app/shared/services/selectable.service';
 import { QuillModule } from 'ngx-quill';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 
 export const routes: Route[] = [
     {
@@ -68,7 +69,8 @@ export const routes: Route[] = [
             ]
           }
         }),
-        MatDialogModule
+        MatDialogModule,
+        MatTabsModule
     ],
     providers: [
       RequestService,

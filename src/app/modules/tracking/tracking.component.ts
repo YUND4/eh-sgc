@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { RequestModel } from '../../shared/models/request.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CLOSE, OPEN, R_TO_CLOSE, EXPIRED } from 'app/shared/constants/status.constants';
 
 @Component({
   selector: 'app-tracking',
@@ -58,7 +59,7 @@ export class TrackingComponent implements OnInit {
     if (viability) {
       this._service.createTracking(new TrackingModel({
         request_id: this._data.id,
-        step_count: 6,
+        step_count: 5,
         last_step_complete: 0
       })).subscribe({
         next: (response: any) => {
@@ -81,6 +82,43 @@ export class TrackingComponent implements OnInit {
     setTimeout(() => {
       this._router.navigateByUrl(`/request/trace/${this._data.request_type_code.toLowerCase()}/${id}`)
     }, 10);
+  }
+
+
+
+  getStatusIcon(element: any) {
+    console.log(element.status_code)
+    if (element.status_code == OPEN) {
+      return 'heroicons_outline:cube-transparent'
+    } else if (element.status_code == R_TO_CLOSE) {
+      return 'heroicons_outline:cube-transparent'
+    } else if (element.status_code == CLOSE) {
+      return 'heroicons_outline:cube'
+    } else if (element.status_code == EXPIRED) {
+      return 'heroicons_outline:cube-transparent'
+    } else {
+      return 'heroicons_outline:cube'
+    }
+  }
+  getStatusIconColor(element: any) {
+    if (element.status_code == OPEN) {
+      return 'text-blue_eh'
+    } else if (element.status_code == R_TO_CLOSE) {
+      return 'text-orange_eh'
+    } else if (element.status_code == CLOSE) {
+      return 'text-green_eh'
+    } else if (element.status_code == EXPIRED) {
+      return 'text-warn'
+    } else {
+      return 'text-gray'
+    }
+  }
+
+  editViability(element: any) {
+    // if (element.status_code == CLOSE) {
+    //   return true
+    // }
+    return false
   }
 
 }

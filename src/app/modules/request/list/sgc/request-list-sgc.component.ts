@@ -105,10 +105,10 @@ export class RequestListSGCComponent{
   }
 
   editViability(element: RequestModel) {
-    if (this.currentUser.role_code == ADMIN && [ R_TO_CLOSE, OPEN ].includes(element.status_code)) {
-      return true
-    }
-    return false
+    // if (this.currentUser.role_code == ADMIN && [ R_TO_CLOSE, OPEN ].includes(element.status_code)) {
+    //   return true
+    // }
+    return true
   }
 
   getStatusIcon(element: RequestModel) {

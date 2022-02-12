@@ -16,6 +16,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { DashboardCommonComponent } from './dashboard-common.component';
 import { projectRoutes } from './dashboard-common.routing';
+import { UserService } from 'app/core/user/user.service';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,9 @@ import { projectRoutes } from './dashboard-common.routing';
         NgApexchartsModule,
         TranslocoModule,
         SharedModule
+    ],
+    providers: [
+      UserService
     ]
 })
 export class DashboardCommonModule

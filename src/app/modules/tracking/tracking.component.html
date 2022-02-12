@@ -22,14 +22,16 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="steps">
-        <th mat-header-cell *matHeaderCellDef> Lider Auditado </th>
+        <th mat-header-cell *matHeaderCellDef>Avance del seguimiento</th>
         <td mat-cell *matCellDef="let element"> {{element.last_step_complete}}/{{element.step_count}} </td>
       </ng-container>
 
       <!-- Weight Column -->
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Fecha </th>
-        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon [class]="getStatusIconColor(element)" [svgIcon]="getStatusIcon(element)"></mat-icon>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="options">
@@ -38,8 +40,8 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <div class="flex justify-end">
-            <button mat-icon-button  mat-dialog-close color="primary" matTooltip="continuar seguimiento" class="mr-2" (click)="followTracking(element.id)">
-              <mat-icon [svgIcon]="'heroicons_outline:external-link'"></mat-icon>
+            <button mat-icon-button mat-dialog-close [disabled]="editViability(element)" color="primary" matTooltip="continuar seguimiento " class="mr-2 " (click)="followTracking(element.id) ">
+              <mat-icon [svgIcon]=" 'heroicons_outline:external-link' "></mat-icon>
             </button>
           </div>
         </td>
@@ -53,5 +55,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cerrar</button>
-  <button mat-button cdkFocusInitial class="bg-primary text-white" (click)="newTracking()">Nuevo seguimiento</button>
+  <button mat-button cdkFocusInitial class="bg-primary text-white " (click)="newTracking() ">Nuevo seguimiento</button>
 </mat-dialog-actions>

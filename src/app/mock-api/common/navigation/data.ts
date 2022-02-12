@@ -2,6 +2,23 @@
 import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
+
+  {
+    id: 'dashboard',
+    title: 'Inicio',
+    type: 'group',
+    icon: 'heroicons_outline:chart-pie',
+    children: [
+      {
+        id: 'dashboard',
+        title: 'Inicio',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/dashboard/common',
+        children: []
+      },
+    ]
+  },
   {
     id: 'menu',
     title: 'Menu',

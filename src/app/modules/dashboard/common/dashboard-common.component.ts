@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ApexOptions } from 'ng-apexcharts';
 import { DashboardCommonService } from './dashboard-common.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 @Component({
   selector: 'dashboard-common',
@@ -20,14 +22,23 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
   data: any;
   selectedProject: string = 'ACME Corp. Backend App';
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  user: User;
 
   /**
    * Constructor
    */
   constructor(
     private _dashboardCommonService: DashboardCommonService,
-    private _router: Router
+    private _userService: UserService,
+    private _router: Router,
+    private _cdr: ChangeDetectorRef
   ) {
+    this._userService.get().subscribe({
+      next: (v) => {
+        this.user = v['data']
+        _cdr.detectChanges()
+      }
+    })
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -39,16 +50,44 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     // Get the data
-    this._dashboardCommonService.data$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((data) => {
-
-        // Store the data
-        this.data = data;
-
-        // Prepare the chart data
-        this._prepareChartData();
-      });
+    this.data = {
+      overview: {
+          'this-week': {
+            'sgc-open'    : 214,
+            'sgc-r-close' : 75,
+            'sgc-close'   : 3,
+            'sci-open'    : 214,
+            'sci-r-close' : 75,
+            'sci-close'   : 3,
+          },
+          'last-week': {
+            'sgc-open'    : 214,
+            'sgc-r-close' : 75,
+            'sgc-close'   : 3,
+            'sci-open'    : 214,
+            'sci-r-close' : 75,
+            'sci-close'   : 3,
+          }
+        },
+        labels  : ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+        series  : {
+        'this-week': [
+            {
+              name: 'Nuevas solicitudes',
+              type: 'area',
+              data: [0, 1, 0, 2, 1, 3, 4]
+            }
+          ],
+          'last-week': [
+            {
+              name: 'Nuevas solicitudes',
+              type: 'area',
+              data: [3, 4, 4, 5, 7, 6, 0]
+            }
+          ]
+        }
+    }
+    this._prepareChartData()
 
     // Attach SVG fill fixer to all ApexCharts
     window['Apex'] = {
@@ -129,7 +168,7 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
         fontFamily: 'inherit',
         foreColor: 'inherit',
         height: '100%',
-        type: 'line',
+        type: 'area',
         toolbar: {
           show: false
         },
@@ -137,7 +176,7 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
           enabled: false
         }
       },
-      colors: ['#64748B', '#94A3B8'],
+      // colors: ['#64748B', '#94A3B8'],
       dataLabels: {
         enabled: true,
         enabledOnSeries: [0],
@@ -148,7 +187,7 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
       grid: {
         borderColor: 'var(--fuse-border)'
       },
-      labels: this.data.githubIssues.labels,
+      labels: this.data.labels,
       legend: {
         show: false
       },
@@ -157,7 +196,7 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
           columnWidth: '50%'
         }
       },
-      series: this.data.githubIssues.series,
+      series: this.data.series,
       states: {
         hover: {
           filter: {
@@ -195,230 +234,6 @@ export class DashboardCommonComponent implements OnInit, OnDestroy {
           style: {
             colors: 'var(--fuse-text-secondary)'
           }
-        }
-      }
-    };
-
-    // Task distribution
-    this.chartTaskDistribution = {
-      chart: {
-        fontFamily: 'inherit',
-        foreColor: 'inherit',
-        height: '100%',
-        type: 'polarArea',
-        toolbar: {
-          show: false
-        },
-        zoom: {
-          enabled: false
-        }
-      },
-      labels: this.data.taskDistribution.labels,
-      legend: {
-        position: 'bottom'
-      },
-      plotOptions: {
-        polarArea: {
-          spokes: {
-            connectorColors: 'var(--fuse-border)'
-          },
-          rings: {
-            strokeColor: 'var(--fuse-border)'
-          }
-        }
-      },
-      series: this.data.taskDistribution.series,
-      states: {
-        hover: {
-          filter: {
-            type: 'darken',
-            value: 0.75
-          }
-        }
-      },
-      stroke: {
-        width: 2
-      },
-      theme: {
-        monochrome: {
-          enabled: true,
-          color: '#93C5FD',
-          shadeIntensity: 0.75,
-          shadeTo: 'dark'
-        }
-      },
-      tooltip: {
-        followCursor: true,
-        theme: 'dark'
-      },
-      yaxis: {
-        labels: {
-          style: {
-            colors: 'var(--fuse-text-secondary)'
-          }
-        }
-      }
-    };
-
-    // Budget distribution
-    this.chartBudgetDistribution = {
-      chart: {
-        fontFamily: 'inherit',
-        foreColor: 'inherit',
-        height: '100%',
-        type: 'radar',
-        sparkline: {
-          enabled: true
-        }
-      },
-      colors: ['#818CF8'],
-      dataLabels: {
-        enabled: true,
-        formatter: (val: number): string | number => `${val}%`,
-        textAnchor: 'start',
-        style: {
-          fontSize: '13px',
-          fontWeight: 500
-        },
-        background: {
-          borderWidth: 0,
-          padding: 4
-        },
-        offsetY: -15
-      },
-      markers: {
-        strokeColors: '#818CF8',
-        strokeWidth: 4
-      },
-      plotOptions: {
-        radar: {
-          polygons: {
-            strokeColors: 'var(--fuse-border)',
-            connectorColors: 'var(--fuse-border)'
-          }
-        }
-      },
-      series: this.data.budgetDistribution.series,
-      stroke: {
-        width: 2
-      },
-      tooltip: {
-        theme: 'dark',
-        y: {
-          formatter: (val: number): string => `${val}%`
-        }
-      },
-      xaxis: {
-        labels: {
-          show: true,
-          style: {
-            fontSize: '12px',
-            fontWeight: '500'
-          }
-        },
-        categories: this.data.budgetDistribution.categories
-      },
-      yaxis: {
-        max: (max: number): number => parseInt((max + 10).toFixed(0), 10),
-        tickAmount: 7
-      }
-    };
-
-    // Weekly expenses
-    this.chartWeeklyExpenses = {
-      chart: {
-        animations: {
-          enabled: false
-        },
-        fontFamily: 'inherit',
-        foreColor: 'inherit',
-        height: '100%',
-        type: 'line',
-        sparkline: {
-          enabled: true
-        }
-      },
-      colors: ['#22D3EE'],
-      series: this.data.weeklyExpenses.series,
-      stroke: {
-        curve: 'smooth'
-      },
-      tooltip: {
-        theme: 'dark'
-      },
-      xaxis: {
-        type: 'category',
-        categories: this.data.weeklyExpenses.labels
-      },
-      yaxis: {
-        labels: {
-          formatter: (val): string => `$${val}`
-        }
-      }
-    };
-
-    // Monthly expenses
-    this.chartMonthlyExpenses = {
-      chart: {
-        animations: {
-          enabled: false
-        },
-        fontFamily: 'inherit',
-        foreColor: 'inherit',
-        height: '100%',
-        type: 'line',
-        sparkline: {
-          enabled: true
-        }
-      },
-      colors: ['#4ADE80'],
-      series: this.data.monthlyExpenses.series,
-      stroke: {
-        curve: 'smooth'
-      },
-      tooltip: {
-        theme: 'dark'
-      },
-      xaxis: {
-        type: 'category',
-        categories: this.data.monthlyExpenses.labels
-      },
-      yaxis: {
-        labels: {
-          formatter: (val): string => `$${val}`
-        }
-      }
-    };
-
-    // Yearly expenses
-    this.chartYearlyExpenses = {
-      chart: {
-        animations: {
-          enabled: false
-        },
-        fontFamily: 'inherit',
-        foreColor: 'inherit',
-        height: '100%',
-        type: 'line',
-        sparkline: {
-          enabled: true
-        }
-      },
-      colors: ['#FB7185'],
-      series: this.data.yearlyExpenses.series,
-      stroke: {
-        curve: 'smooth'
-      },
-      tooltip: {
-        theme: 'dark'
-      },
-      xaxis: {
-        type: 'category',
-        categories: this.data.yearlyExpenses.labels
-      },
-      yaxis: {
-        labels: {
-          formatter: (val): string => `$${val}`
         }
       }
     };

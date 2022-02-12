@@ -13,6 +13,7 @@ import { AlertService } from '../../../../shared/services/dialog.service';
 import { messages } from '../../../../mock-api/common/messages/data';
 import { formatDate } from '@angular/common';
 import * as moment from 'moment';
+import { SelectionRequiredValidator } from '../../../../shared/validators/onlySelectable';
 
 
 @Component({
@@ -59,46 +60,36 @@ export class RequestCreateSGCComponent implements OnInit {
       this.requestFormControl = new FormGroup({
         init_date: new FormControl(moment(), [ Validators.required ]),
         detected_date: new FormControl('', [ Validators.required ]),
-        detected_in_code: new FormControl('', [ Validators.required ]),
-        detected_for_id: new FormControl('', [ Validators.required ]),
-        unfulfilled_requirement_code: new FormControl('', [ Validators.required ]),
-        process_lead_id: new FormControl('', [ Validators.required ]),
-        affected_process_code: new FormControl('', [ Validators.required ]),
-        how_detected_code: new FormControl('', [ Validators.required ]),
-        action_type_code: new FormControl('', [ Validators.required ]),
+        detected_in_code: new FormControl('', [ Validators.required, SelectionRequiredValidator]),
+        detected_for_id: new FormControl('', [ Validators.required, SelectionRequiredValidator]),
+        unfulfilled_requirement_code: new FormControl('', [ Validators.required, SelectionRequiredValidator ]),
+        process_lead_id: new FormControl('', [ Validators.required, SelectionRequiredValidator]),
+        affected_process_code: new FormControl('', [ Validators.required,SelectionRequiredValidator ]),
+        how_detected_code: new FormControl('', [ Validators.required, SelectionRequiredValidator ]),
+        action_type_code: new FormControl('', [ Validators.required, SelectionRequiredValidator ]),
         evidence_description: new FormControl('', [ Validators.required ]),
         request_description: new FormControl('', [ Validators.required ]),
         evidence_file: new FormControl('', [ Validators.required ]),
       });
       this.loadSelectOptions()
+      this.requestFormControl.get('init_date').disable()
       this.requestFormControl.get('evidence_description').valueChanges.subscribe({
         next: (_) => {
-          const quillEditor = document.getElementsByName('evidence_description')[0]
-          const toolbar = quillEditor.getElementsByClassName('ql-toolbar')[0]
-          const body = quillEditor.getElementsByClassName('ql-container')[0]
-
-          if (!this.requestFormControl.get('evidence_description').valid) {
-            toolbar.setAttribute('style', 'border-color: red !important')
-            body.setAttribute('style', 'border-color: red !important')
+          const label = document.getElementsByClassName('mat-tab-label-content')[0]
+          if (this.requestFormControl.get('evidence_description').valid) {
+            label.setAttribute('style', '')
           } else {
-            toolbar.setAttribute('style', 'border-color: gray')
-            body.setAttribute('style', 'border-color: gray')
+            label.setAttribute('style', 'color: red !important')
           }
         }
       })
-      this.requestFormControl.get('init_date').disable()
       this.requestFormControl.get('request_description').valueChanges.subscribe({
-        next: (v) => {
-          const quillEditor = document.getElementsByName('request_description')[0]
-          const toolbar = quillEditor.getElementsByClassName('ql-toolbar')[0]
-          const body = quillEditor.getElementsByClassName('ql-container')[0]
-
-          if (!this.requestFormControl.get('request_description').valid) {
-            toolbar.setAttribute('style', 'border-color: red !important')
-            body.setAttribute('style', 'border-color: red !important')
+        next: (_) => {
+          const label = document.getElementsByClassName('mat-tab-label-content')[1]
+          if (this.requestFormControl.get('request_description').valid) {
+            label.setAttribute('style', '')
           } else {
-            toolbar.setAttribute('style', 'border-color: gray')
-            body.setAttribute('style', 'border-color: gray')
+            label.setAttribute('style', 'color: red !important')
           }
         }
       })
@@ -186,7 +177,9 @@ export class RequestCreateSGCComponent implements OnInit {
       this._alert.confirmation('Estas a punto de crear una nueva solicitud.').afterClosed().subscribe({
         next: (v) => {
           if (['confirmed'].includes(v)) {
+            this.requestFormControl.get('init_date').enable()
             const data =  {...this.requestFormControl.value}
+            this.requestFormControl.get('init_date').disable()
             data['detected_for_id'] = data['detected_for_id'].id
             data['process_lead_id'] = data['process_lead_id'].id
             data['detected_in_code'] = data['detected_in_code'].code

@@ -24,6 +24,11 @@ import * as service from '../../../../shared/services/users.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SelectableService } from '../../../../shared/services/selectable.service';
 import { QuillModule } from 'ngx-quill';
+import { FuseCardModule } from '../../../../../@fuse/components/card/card.module';
+import { FuseScrollbarModule } from '../../../../../@fuse/directives/scrollbar/scrollbar.module';
+import { Step3Component } from './steps/step3/step3.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Step5Component } from './steps/step5/step5.component';
 
 
 export const routes: Route[] = [
@@ -35,7 +40,9 @@ export const routes: Route[] = [
 
 @NgModule({
     declarations: [
-      RequestTraceSGCComponent
+      RequestTraceSGCComponent,
+      Step3Component,
+      Step5Component,
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -64,6 +71,9 @@ export const routes: Route[] = [
             ]
           }
         }),
+        FuseCardModule,
+        FuseScrollbarModule,
+        MatTooltipModule
     ],
     providers: [
       core.UserService,
