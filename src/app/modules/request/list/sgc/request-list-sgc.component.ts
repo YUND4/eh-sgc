@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { ADMIN } from '../../../../shared/constants/rol.constants';
-import { CLOSE, EXPIRED, OPEN, R_TO_CLOSE } from 'app/shared/constants/status.constants';
+import { CLOSE, EXPIRED, OPEN, PENDING, R_TO_CLOSE } from 'app/shared/constants/status.constants';
 import { SGC } from '../../../../shared/constants/request-types.constants';
 
 @Component({
@@ -104,6 +104,14 @@ export class RequestListSGCComponent{
     this._router.navigateByUrl(`/request/detail`)
   }
 
+  followInit(element): void {
+    this._router.navigateByUrl(`/request/init/sgc/${element.id}`)
+  }
+
+  followFinish(element): void {
+    this._router.navigateByUrl(`/request/finish/sgc/${element.id}`)
+  }
+
   editViability(element: RequestModel) {
     // if (this.currentUser.role_code == ADMIN && [ R_TO_CLOSE, OPEN ].includes(element.status_code)) {
     //   return true
@@ -115,6 +123,8 @@ export class RequestListSGCComponent{
     console.log(element.status_code)
     if (element.status_code == OPEN) {
       return 'heroicons_outline:cube-transparent'
+    } else if (element.status_code == PENDING) {
+      return 'heroicons_outline:minus-sm'
     } else if (element.status_code == R_TO_CLOSE) {
       return 'heroicons_outline:cube-transparent'
     } else if (element.status_code == CLOSE) {
@@ -128,6 +138,8 @@ export class RequestListSGCComponent{
   getStatusIconColor(element: RequestModel) {
     if (element.status_code == OPEN) {
       return 'text-blue_eh'
+    } else if (element.status_code == PENDING) {
+      return 'text-warn'
     } else if (element.status_code == R_TO_CLOSE) {
       return 'text-orange_eh'
     } else if (element.status_code == CLOSE) {

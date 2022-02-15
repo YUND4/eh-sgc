@@ -1,0 +1,78 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500">Solicitud</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">Seguimiento</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          Seguimiento
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex-auto p-6 sm:p-10">
+
+    <div class="max-w-full">
+
+      <!-- Vertical stepper -->
+
+      <form class="p-4 bg-card shadow rounded overflow-hidden" [formGroup]="verticalStepperForm">
+        <mat-vertical-stepper [linear]="true" #verticalStepper>
+          <mat-step [formGroupName]="'step1'" [stepControl]="verticalStepperForm.get('step1')" #verticalStepperStep1>
+            <ng-template matStepLabel>Analisis de causas</ng-template>
+            <div class="flex justify-end">
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+                Siguiente
+              </button>
+            </div>
+          </mat-step>
+
+          <mat-step [formGroupName]="'step2'" [stepControl]="verticalStepperForm.get('step2')" #verticalStepperStep2>
+            <ng-template matStepLabel>Plan de mejoramiento</ng-template>
+            <div class="flex justify-end mt-5">
+              <button mat-icon-button (click)="removeCauses(upgradePlan)">
+                <mat-icon [svgIcon]="'heroicons_outline:minus-sm'" class="mr-2"></mat-icon>
+              </button>
+              <button mat-icon-button (click)="addCauses(upgradePlan)">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'" class="mr-2"></mat-icon>
+              </button>
+            </div>
+            <div class="flex justify-end">
+              <button class="px-8 mr-2" mat-flat-button type="button" matStepperPrevious>
+                Atras
+              </button>
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+                Siguiente
+              </button>
+            </div>
+          </mat-step>
+
+          <mat-step [formGroupName]="'step3'" [stepControl]="verticalStepperForm.get('step3')">
+            <ng-template matStepLabel>Resultados de seguimiento y cierre de la accion</ng-template>
+            <div class="flex justify-end mt-8">
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+                Completar seguimiento
+              </button>
+            </div>
+          </mat-step>
+        </mat-vertical-stepper>
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
