@@ -12,6 +12,7 @@ import { SelectionRequiredValidator } from 'app/shared/validators/onlySelectable
 import * as core from 'app/core/user/user.service';
 import * as service from 'app/shared/services/users.service';
 import moment from 'moment';
+import { RequestService } from '../../../../shared/services/request.service';
 
 @Component({
     selector     : 'request-init',
@@ -30,7 +31,7 @@ export class RequestInitSGCComponent
   upgradePlanI: [number] = [1,];
   upgradePlanD: [number] = [1,];
   srcResult: string = '';
-  trackingId: any;
+  requestId: any;
   base64FilesI = {};
   base64FilesD = {};
   isAdmin: boolean = false;
@@ -40,6 +41,7 @@ export class RequestInitSGCComponent
 
   selectables = {}
   timeout: any;
+  user: any;
 
   /**
    * Constructor
@@ -54,14 +56,16 @@ export class RequestInitSGCComponent
     private _coreUserService: core.UserService,
     private _userService: service.UserService,
     private _selectableService: SelectableService,
+    private _requestService: RequestService,
     ) {
     this._coreUserService.get().subscribe({
         next: (v) => {
-          this.isAdmin = true
+          this.verifyPermission()
+          this.user = v['data']
         }
     })
     this._route.params.subscribe(params => {
-      this.trackingId = params['id']
+      this.requestId = params['id']
     });
     this.loadFormGroup()
     this.loadUsers('lead_name', '1')
@@ -70,28 +74,24 @@ export class RequestInitSGCComponent
     this.loadUsers('user_name_3', '1')
     this.loadUsers('user_name_4', '1')
     this.loadUsers('user_name_5', '1')
-    this.loadUsers('user_tracking_id', '5')
-    this.loadUsers('user_granted_id', '5')
-    this.loadSelectables('result_code', '5')
-    this.getStep(5).get('total_agree').valueChanges.subscribe({
-      next: (v) => {
-        this.autofillReview(v, this.getStep(5).value['total_disagree'])
-      }
-    })
-    this.getStep(5).get('total_disagree').valueChanges.subscribe({
-      next: (v) => {
-        this.autofillReview(this.getStep(5).value['total_agree'], v)
-      }
-    })
     this.loadStep1()
     this.loadStep2()
     this.loadStep3()
     this.loadStep4()
-    this.loadStep5()
+  }
+  verifyPermission() {
+    this._requestService.findRequest(this.requestId, SGC).subscribe({
+      next: (v) => {
+        console.log(this.user.id.toString() != v['data'][0]['process_lead_id'])
+        if (this.user.id.toString() != v['data'][0]['process_lead_id']) {
+          this.disables = [1,2,3,4]
+        }
+      }
+    })
   }
 
   loadStep5() {
-    this._service.retriveStep(5, SGC.toLocaleLowerCase(), this.trackingId).subscribe({
+    this._service.retriveStep(5, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
         if (v['data'].length != 0){
           const frequest = v['data'][0]
@@ -118,7 +118,7 @@ export class RequestInitSGCComponent
   }
 
   loadStep2() {
-    this._service.retriveStep(2, SGC.toLocaleLowerCase(), this.trackingId).subscribe({
+    this._service.retriveStep(2, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
         let count = 1;
         v['data'].forEach((uplan: any) => {
@@ -144,7 +144,7 @@ export class RequestInitSGCComponent
   }
 
   loadStep4() {
-    this._service.retriveStep(4, SGC.toLocaleLowerCase(), this.trackingId).subscribe({
+    this._service.retriveStep(4, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
         let count = 1;
         v['data'].forEach((uplan: any) => {
@@ -169,7 +169,7 @@ export class RequestInitSGCComponent
   }
 
   loadStep3() {
-    this._service.retriveStep(3, SGC.toLocaleLowerCase(), this.trackingId).subscribe({
+    this._service.retriveStep(3, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
         if (v['data'].length != 0) {
           this.disables.push(3)
@@ -180,7 +180,7 @@ export class RequestInitSGCComponent
   }
 
   loadStep1() {
-    this._service.retriveStep(1, SGC.toLocaleLowerCase(), this.trackingId).subscribe({
+    this._service.retriveStep(1, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
         let first = true
         let count = 1;
@@ -495,6 +495,7 @@ export class RequestInitSGCComponent
         name   : formValues['lead_name'].constructor.name == 'String' ? formValues['lead_name'] : formValues['lead_name'].name,
         area  : formValues['lead_area'],
         position   : formValues['lead_position'],
+        request_id   : this.requestId,
       }
       if (formValues['lead_id']) { lead['user_id'] = formValues['lead_id'] }
       const data = [
@@ -505,13 +506,13 @@ export class RequestInitSGCComponent
           name   : formValues[`user_name_${count}`].constructor.name == 'String' ? formValues[`user_name_${count}`] : formValues[`user_name_${count}`].name,
           area  : formValues[`user_area_${count}`],
           position   : formValues[`user_position_${count}`],
+          request_id   : this.requestId,
         }
         if (formValues[`user_id_${count}`]) { user['user_id'] = formValues[`user_id_${count}`] }
         data.push(user)
       });
       this._service.completeStep({
-        tracking_id: this.trackingId,
-        tracking_team_memebers : data
+        team_memebers : data
       }, 1, 'sgc')
       .subscribe({
         next: (v)  => {
@@ -542,11 +543,12 @@ export class RequestInitSGCComponent
           unit_measurement:  formValues[`unit_measurement_${count}`],
           follow_process_description:  formValues[`follow_process_description_${count}`],
           evidence_file:  this.base64FilesI[`evidence_file_${count}`],
-          percentage:  formValues[`percentage_${count}`]
+          percentage:  formValues[`percentage_${count}`],
+          request_id   : this.requestId,
         })
       });
       this._service.completeStep({
-        tracking_id: this.trackingId,
+        tracking_id: this.requestId,
         upgrade_plan : data
       }, 2, 'sgc')
       .subscribe({
@@ -578,18 +580,17 @@ export class RequestInitSGCComponent
           unit_measurement:  formValues[`unit_measurement_${count}`],
           follow_process_description:  formValues[`follow_process_description_${count}`],
           evidence_file:  this.base64FilesD[`evidence_file_${count}`],
-          percentage:  formValues[`percentage_${count}`]
+          percentage:  formValues[`percentage_${count}`],
+          request_id   : this.requestId,
         })
       });
       this._service.completeStep({
-        tracking_id: this.trackingId,
         upgrade_plan : data
       }, 4, 'sgc')
       .subscribe({
         next: (v)  => {
           console.log(`Correcto ${v['data']}`)
-          this. stepper.next()
-          // this._router.navigateByUrl(`/request/invoice/${v['data']['id']}`)
+          this._router.navigateByUrl(`/request/list/sgc`)
         },
         error: (e) => { this.serverError() },
         complete: () => { console.log("Completado") }
@@ -606,7 +607,7 @@ export class RequestInitSGCComponent
       data['user_granted_id'] = data['user_granted_id']['id']
       data['user_tracking_id'] = data['user_tracking_id']['id']
       this._service.completeStep({
-        tracking_id: this.trackingId,
+        tracking_id: this.requestId,
         finish_request: data
       }, 5, 'sgc')
       .subscribe({

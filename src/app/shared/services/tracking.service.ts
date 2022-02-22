@@ -11,11 +11,11 @@ export class TrackingService
   }
 
   getTrackings(id: number) {
-    return this._http.get<TrackingModel[]>(`${BASE_URL}/api/tracking?request_id=${id}`);
+    return this._http.get<any>(`${BASE_URL}/api/tracking?upgrade_plan_id=${id}`);
   }
 
-  createTracking(data: TrackingModel) {
-    return this._http.post<TrackingModel>(`${BASE_URL}/api/tracking/create`, { tracking: data });
+  createTracking(data: any) {
+    return this._http.post<any>(`${BASE_URL}/api/tracking/create`, { tracking: data });
   }
 
 }

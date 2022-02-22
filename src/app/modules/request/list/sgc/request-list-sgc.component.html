@@ -87,13 +87,13 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <div class="flex justify-end">
-            <button mat-icon-button *ngIf="editViability(element)" matTooltip="Actualiza el seguimiento" class="mr-2" (click)="openDialog(element)">
+            <button mat-icon-button *ngIf="editViability(element, 'follow')" matTooltip="Seguimiento" class="mr-2" (click)="followTracking(element)">
               <mat-icon class="text-orange_eh" [svgIcon]="'heroicons_outline:book-open'"></mat-icon>
             </button>
-            <button mat-icon-button *ngIf="editViability(element)" matTooltip="Iniciar un Seguimiento" class="mr-2" (click)="followInit(element)">
+            <button mat-icon-button *ngIf="editViability(element, 'init')" matTooltip="Atender solicitud" class="mr-2" (click)="followInit(element)">
               <mat-icon class="text-warn" [svgIcon]="'heroicons_outline:bell'"></mat-icon>
             </button>
-            <button mat-icon-button *ngIf="editViability(element)" matTooltip="Finaliza una solicitud" class="mr-2" (click)="followFinish(element)">
+            <button mat-icon-button *ngIf="editViability(element, 'finish')" matTooltip="Evaluar solicitud" class="mr-2" (click)="followFinish(element)">
               <mat-icon class="text-green_eh" [svgIcon]="'heroicons_outline:key'"></mat-icon>
             </button>
             <button mat-icon-button color="primary" matTooltip="Ver detalle" class="mr-2">

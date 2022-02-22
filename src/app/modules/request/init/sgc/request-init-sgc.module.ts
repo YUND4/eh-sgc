@@ -21,6 +21,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseCardModule } from '@fuse/components/card';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { QuillModule } from 'ngx-quill';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthService } from 'app/core/auth/auth.service';
+import { BaseInterceptor } from 'app/shared/base/base.interceptor';
+import { SelectableService } from 'app/shared/services/selectable.service';
+import { WizardService } from 'app/shared/services/wizard.service';
+import * as core from '../../../../core/user/user.service';
+import * as service from '../../../../shared/services/users.service';
+import { RequestService } from '../../../../shared/services/request.service';
 
 
 export const routes: Route[] = [
@@ -65,6 +73,15 @@ export const routes: Route[] = [
         FuseCardModule,
         FuseScrollbarModule,
         MatTooltipModule
+    ],
+    providers: [
+      core.UserService,
+      service.UserService,
+      AuthService,
+      WizardService,
+      SelectableService,
+      RequestService,
+      { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })
 export class RequestInitSGCModule

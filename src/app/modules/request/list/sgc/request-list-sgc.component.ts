@@ -13,6 +13,7 @@ import { User } from 'app/core/user/user.types';
 import { ADMIN } from '../../../../shared/constants/rol.constants';
 import { CLOSE, EXPIRED, OPEN, PENDING, R_TO_CLOSE } from 'app/shared/constants/status.constants';
 import { SGC } from '../../../../shared/constants/request-types.constants';
+import { ANONYMOUS_USER } from 'app/shared/constants/default.constant';
 
 @Component({
   selector: 'app-request-list',
@@ -29,7 +30,7 @@ export class RequestListSGCComponent{
   postPerPage: number = 0;
   isAdmin: boolean = true;
   searchFormControl: FormGroup;
-  currentUser: User;
+  currentUser: User = ANONYMOUS_USER;
 
   constructor(
     private _service: RequestService,
@@ -104,6 +105,10 @@ export class RequestListSGCComponent{
     this._router.navigateByUrl(`/request/detail`)
   }
 
+  followTracking(element): void {
+    this._router.navigateByUrl(`/request/trace/sgc/${element.id}`)
+  }
+
   followInit(element): void {
     this._router.navigateByUrl(`/request/init/sgc/${element.id}`)
   }
@@ -112,15 +117,19 @@ export class RequestListSGCComponent{
     this._router.navigateByUrl(`/request/finish/sgc/${element.id}`)
   }
 
-  editViability(element: RequestModel) {
-    // if (this.currentUser.role_code == ADMIN && [ R_TO_CLOSE, OPEN ].includes(element.status_code)) {
-    //   return true
-    // }
-    return true
+  editViability(element: any, type: 'follow' | 'init' | 'finish') {
+    if (type == 'init') {
+      return this.currentUser.role_code == ADMIN || (this.currentUser.id == element.process_lead_id && [ PENDING ].includes(element.status_code))
+    } else if (type == 'follow') {
+      return this.currentUser.role_code == ADMIN || (this.currentUser.id == element.process_lead_id && [ OPEN ].includes(element.status_code))
+    } else if (type == 'finish') {
+      return this.currentUser.role_code == ADMIN && [ R_TO_CLOSE ].includes(element.status_code)
+    } else {
+      return false
+    }
   }
 
   getStatusIcon(element: RequestModel) {
-    console.log(element.status_code)
     if (element.status_code == OPEN) {
       return 'heroicons_outline:cube-transparent'
     } else if (element.status_code == PENDING) {

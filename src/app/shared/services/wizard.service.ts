@@ -16,11 +16,11 @@ export class WizardService
     return this._http.post(`${BASE_URL}/api/wizard/${module}/complete/${step}`, data);
   }
 
-  retriveStep(step: number, module: string, trackingId: number) {
+  retriveStep(step: number, module: string, requestId: number) {
     if ([2, 4].includes(step)) {
-      return this._http.get(`${BASE_URL}/api/wizard/${module}/retrive/${step}?tracking_id=${trackingId}&upgrade_plan_type_code=${ step == 2 ? INM : DEF}`);
+      return this._http.get(`${BASE_URL}/api/wizard/${module}/retrive/${step}?request_id=${requestId}&upgrade_plan_type_code=${ step == 2 ? INM : DEF}`);
     }
-    return this._http.get(`${BASE_URL}/api/wizard/${module}/retrive/${step}?tracking_id=${trackingId}`);
+    return this._http.get(`${BASE_URL}/api/wizard/${module}/retrive/${step}?request_id=${requestId}`);
   }
 
 }

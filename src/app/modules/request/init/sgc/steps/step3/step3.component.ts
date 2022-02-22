@@ -25,7 +25,7 @@ export class Step3Component implements OnInit {
   questionaryConfig: { question: string; required: boolean; answers: { success_button: boolean; cancel_button: boolean; answer_field: boolean; }; }[];
 
   @Input() stepper;
-  trackingId: number;
+  requestId: number;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -126,7 +126,7 @@ export class Step3Component implements OnInit {
     ]
 
     this._route.params.subscribe(params => {
-      this.trackingId = params['id']
+      this.requestId = params['id']
     });
     this.questionaryControl = _formBuilder.group({
       answer: ['', [Validators.required]]
@@ -138,7 +138,7 @@ export class Step3Component implements OnInit {
   }
 
   loadStep() {
-    this._service.retriveStep(3, SGC.toLocaleLowerCase(), this.trackingId).subscribe({
+    this._service.retriveStep(3, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
         this.data = v['data']
         if (v['data'].length != 0) {
@@ -189,7 +189,8 @@ export class Step3Component implements OnInit {
     } else {
       this.data.push({
         question: this.question,
-        answer: 'Si'
+        answer: 'Si',
+        request_id: this.requestId,
       })
       if (this.questionaryConfig[this.currentQuestion].required) {
         this.nextQuestion()
@@ -209,7 +210,8 @@ export class Step3Component implements OnInit {
       } else {
         this.data.push({
           question: this.question,
-          answer: 'No'
+          answer: 'No',
+          request_id: this.requestId,
         })
         this.nextQuestion()
       }
@@ -220,7 +222,8 @@ export class Step3Component implements OnInit {
     if (this.questionaryControl.valid) {
       this.data.push({
         question: this.question,
-        answer: this.questionaryControl.value['answer']
+        answer: this.questionaryControl.value['answer'],
+        request_id: this.requestId,
       })
       this.enableRootQuestion = true;
       this.question = `¿Es esta la raiz del problema?`
@@ -238,7 +241,6 @@ export class Step3Component implements OnInit {
     }
     if (this.questionaryDone) {
       this._service.completeStep({
-        tracking_id: this.trackingId,
         answers: this.data
       }, 3, 'sgc')
       .subscribe({

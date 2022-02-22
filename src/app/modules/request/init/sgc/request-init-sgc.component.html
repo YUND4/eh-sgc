@@ -10,13 +10,13 @@
         </div>
         <div class="flex items-center ml-1 whitespace-nowrap">
           <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
-          <a class="ml-1 text-primary-500">Seguimiento</a>
+          <a class="ml-1 text-primary-500">Atender solicitud</a>
         </div>
       </div>
       <!-- Title -->
       <div class="mt-2">
         <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-          Seguimiento
+          Atender Solicitud
         </h2>
       </div>
     </div>
@@ -30,7 +30,7 @@
       <!-- Vertical stepper -->
 
       <form class="p-4 bg-card shadow rounded overflow-hidden" [formGroup]="formControl">
-        <mat-vertical-stepper [linear]="true" #verticalStepper>
+        <mat-vertical-stepper [linear]="true" #stepper>
           <mat-step [formGroupName]="'step1'" [stepControl]="formControl.get('step1')">
             <ng-template matStepLabel>Equipo de trabajo</ng-template>
             <div class="w-full">
@@ -91,7 +91,7 @@
           </mat-step>
 
           <mat-step [formGroupName]="'step2'" [stepControl]="formControl.get('step2')">
-            <ng-template matStepLabel>Accion correctiva Inmediata</ng-template>
+            <ng-template matStepLabel>Accion de Correccion Inmediata</ng-template>
             <div class="flex justify-end mt-5">
               <button mat-icon-button (click)="removeCauses(upgradePlanI)">
                 <mat-icon [svgIcon]="'heroicons_outline:minus-sm'" class="mr-2"></mat-icon>

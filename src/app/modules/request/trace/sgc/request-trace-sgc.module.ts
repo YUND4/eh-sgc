@@ -26,9 +26,9 @@ import { SelectableService } from '../../../../shared/services/selectable.servic
 import { QuillModule } from 'ngx-quill';
 import { FuseCardModule } from '../../../../../@fuse/components/card/card.module';
 import { FuseScrollbarModule } from '../../../../../@fuse/directives/scrollbar/scrollbar.module';
-import { Step3Component } from './steps/step3/step3.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Step5Component } from './steps/step5/step5.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TrackingService } from '../../../../shared/services/tracking.service';
 
 
 export const routes: Route[] = [
@@ -71,14 +71,12 @@ export const routes: Route[] = [
         }),
         FuseCardModule,
         FuseScrollbarModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatProgressBarModule
     ],
     providers: [
-      core.UserService,
-      service.UserService,
-      AuthService,
+      TrackingService,
       WizardService,
-      SelectableService,
       { provide: HTTP_INTERCEPTORS, useClass: BaseInterceptor, multi: true }
     ]
 })
