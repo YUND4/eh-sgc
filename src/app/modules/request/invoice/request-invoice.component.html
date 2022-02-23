@@ -10,13 +10,13 @@
       <div class="flex items-start justify-between">
         <div class="grid grid-cols-2 gap-x-4 gap-y-1">
           <div class="text-4xl tracking-tight text-secondary">SOLICITUD</div>
-          <div class="text-4xl">#254</div>
+          <div class="text-4xl">#{{requestId.toString().padStart(4, '0')}}</div>
           <div class="font-medium tracking-tight text-secondary">FECHA</div>
-          <div class="font-medium">Jul 19, 2022</div>
+          <div class="font-medium">{{formatDate(request?.init_date)}}</div>
           <div class="font-medium tracking-tight text-secondary">LIDER AUDITADO</div>
-          <div class="font-medium">Diego Palacios</div>
+          <div class="font-medium">{{request?.process_lead_name}}</div>
           <div class="font-medium tracking-tight text-secondary">AUDITOR</div>
-          <div class="font-medium">Leidy Bernate</div>
+          <div class="font-medium">{{request?.detected_for_name}}</div>
         </div>
         <div class="grid auto-cols-max grid-flow-col gap-x-8 -mr-16 py-6 px-8 rounded-l-2xl bg-accent dark">
           <div class="place-self-center w-24">
@@ -28,16 +28,17 @@
             <div>Sede El Bote</div>
             <div>Edificio de la promision</div>
             <div>+57 317 777 7777</div>
-            <div>sci@electrohuila.com</div>
+            <div>sgc@electrohuila.com</div>
             <div>www.electrohuila.com</div>
           </div>
         </div>
       </div>
 
       <div class="text-md">
-        <div class="text-xl font-medium">Problemas de seguridad</div>
-        <div>Departamento de sistemas</div>
-        <p>No se cumple con los requisitos minimos de la ISO 27001</p>
+        <div class="text-xl font-medium">{{request?.unfulfilled_requirement_code}}</div>
+        <div>Departamento de {{request?.affected_process_code}}</div>
+        <div [innerHTML]="request?.request_description"></div>
+        <div [innerHTML]="request?.evidence_description"></div>
       </div>
 
       <div class="mt-16">

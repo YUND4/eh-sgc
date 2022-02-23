@@ -5,4 +5,7 @@ export interface User
     email: string;
     avatar?: string;
     status?: string;
+    position_code?: string;
+    area_code?: string;
+    role_code?: string;
 }

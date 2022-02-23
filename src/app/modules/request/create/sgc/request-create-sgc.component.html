@@ -1,0 +1,144 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500">Solicitud</a>
+        </div>
+        <div class="ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">Nueva</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          Nueva Solicitud
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex-auto p-6 sm:p-10">
+
+    <div class="max-w-6xl">
+      <form class="flex flex-col mt-8 p-8 pb-4 bg-card rounded-2xl shadow overflow-hidden" [formGroup]="requestFormControl">
+
+        <div class="w-full">
+          <mat-form-field class="w-1/4 pl-2">
+            <mat-label>Fecha inicio</mat-label>
+            <input matInput [min]="minDate" [matDatepicker]="picker1" name="init_date" formControlName="init_date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="w-1/4 pl-4">
+            <mat-label>Fecha detecta</mat-label>
+            <input matInput [matDatepicker]="picker2" name="detected_date" formControlName="detected_date">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="w-2/4 pl-4">
+            <mat-label>Detectado en</mat-label>
+            <input matInput name="detected_in_code" formControlName="detected_in_code" [matAutocomplete]="auto0" (input)="onChangeFilter('detectedIn', 'selectable')" />
+            <mat-autocomplete #auto0="matAutocomplete" [displayWith]="displaySelectable">
+              <ng-container>
+                <mat-option *ngFor="let places of selectable['detectedIn']" [value]="places">{{places.description}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="w-full">
+          <mat-form-field class="w-2/3 pl-2">
+            <mat-label>Detectado por </mat-label>
+            <input matInput name="detected_for_id" formControlName="detected_for_id" [matAutocomplete]="auto1" (input)="onChangeFilter('detectedFor', 'user')" />
+            <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayUser">
+              <ng-container>
+                <mat-option *ngFor="let user of selectable['detectedFor']" [value]="user">{{user.name}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field class="w-1/3 pl-4">
+            <mat-label>Requisito afectado</mat-label>
+            <input matInput name="unfulfilled_requirement_code" formControlName="unfulfilled_requirement_code" [matAutocomplete]="auto3" (input)="onChangeFilter('unfulfilledRequirement', 'selectable')" />
+            <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displaySelectable">
+              <ng-container>
+                <mat-option *ngFor="let req of selectable['unfulfilledRequirement']" [value]="req">{{req.description}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="w-full">
+          <mat-form-field class="w-2/3 pl-2">
+            <mat-label>Lider del proceso </mat-label>
+            <input matInput name="process_lead_id" formControlName="process_lead_id" [matAutocomplete]="auto2" (input)="onChangeFilter('processLead', 'user')" />
+            <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayUser">
+              <ng-container>
+                <mat-option *ngFor="let user of selectable['processLead']" [value]="user">{{user.name}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field class="w-1/3 pl-4">
+            <mat-label>Proceso afectado</mat-label>
+            <input matInput name="affected_process_code" formControlName="affected_process_code" [matAutocomplete]="auto4" (input)="onChangeFilter('affectedProcess', 'selectable')" />
+            <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displaySelectable">
+              <ng-container>
+                <mat-option *ngFor="let process of selectable['affectedProcess']" [value]="process">{{process.description}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="w-full">
+          <mat-form-field class="w-2/3 pl-2">
+            <mat-label>Como se detecta </mat-label>
+            <input matInput name="how_detected_code" formControlName="how_detected_code" [matAutocomplete]="auto5" (input)="onChangeFilter('howDetected', 'selectable')" />
+            <mat-autocomplete #auto5="matAutocomplete" [displayWith]="displaySelectable">
+              <ng-container>
+                <mat-option *ngFor="let event of selectable['howDetected']" [value]="event">{{event.description}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field class="w-1/3 pl-4">
+            <mat-label>Tipo de accion</mat-label>
+            <input matInput name="action_type_code" formControlName="action_type_code" [matAutocomplete]="auto6" (input)="onChangeFilter('actionType', 'selectable')" />
+            <mat-autocomplete #auto6="matAutocomplete" [displayWith]="displaySelectable">
+              <ng-container>
+                <mat-option *ngFor="let action of selectable['actionType']" [value]="action">{{action.description}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="w-full">
+          <mat-form-field class="w-full pl-2">
+            <mat-label>Evidencia</mat-label>
+            <ngx-mat-file-input placeholder="Evidencia" name="evidence_file" formControlName="evidence_file" (change)="OnChangeFile()"></ngx-mat-file-input>
+            <mat-icon matSuffix>folder</mat-icon>
+          </mat-form-field>
+        </div>
+
+
+        <mat-tab-group class="mt-5">
+          <mat-tab id="evidence_description" [label]="'Descripcion de la evicencia *'">
+            <div class="w-full pl-2 pb-5">
+              <quill-editor name="evidence_description" [styles]="{height: '450px'}" formControlName="evidence_description"></quill-editor>
+            </div>
+          </mat-tab>
+          <mat-tab id="request_description" [label]="'Descripcion del hallazgo o mejora *'">
+            <div class="w-full pl-2 pb-5">
+              <quill-editor name="request_description" [styles]="{height: '450px'}" formControlName="request_description">
+              </quill-editor>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+
+
+        <button mat-button class="bg-primary text-white" (click)="submit()">Crear una solicitud</button>
+      </form>
+    </div>
+
+  </div>
+
+</div>

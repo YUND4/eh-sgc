@@ -2,22 +2,23 @@
 import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
-  // {
-  //   id: 'dashboard',
-  //   title: 'Inicio',
-  //   subtitle: 'Bienvenido',
-  //   type: 'group',
-  //   icon: 'heroicons_outline:home',
-  //   children: [
-  //     {
-  //       id: 'dashboard.common',
-  //       title: 'Escritorio',
-  //       type: 'basic',
-  //       icon: 'heroicons_outline:clipboard-check',
-  //       link: '/dashboard/common'
-  //     }
-  //   ]
-  // },
+
+  {
+    id: 'dashboard',
+    title: 'Inicio',
+    type: 'group',
+    icon: 'heroicons_outline:chart-pie',
+    children: [
+      {
+        id: 'dashboard',
+        title: 'Inicio',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/dashboard/common',
+        children: []
+      },
+    ]
+  },
   {
     id: 'menu',
     title: 'Menu',
@@ -26,8 +27,8 @@ export const defaultNavigation: FuseNavigationItem[] = [
     icon: 'heroicons_outline:home',
     children: [
       {
-        id: 'sgc-sci',
-        title: 'SGC - SCI',
+        id: 'sgc',
+        title: 'SGC',
         subtitle: '',
         type: 'collapsable',
         icon: 'mat_outline:data_usage',
@@ -44,14 +45,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Nuevo',
                 type: 'basic',
                 icon: 'heroicons_outline:pencil-alt',
-                link: '/request/create'
+                link: '/request/create/sgc'
               },
               {
                 id: 'request.list',
                 title: 'Listar',
                 type: 'basic',
                 icon: 'heroicons_outline:menu-alt-2',
-                link: '/request/list'
+                link: '/request/list/sgc'
               },
               {
                 id: 'request.detail',
@@ -64,8 +65,8 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id: 'request.trace',
                 title: 'Seguimiento',
                 type: 'basic',
-                icon: 'heroicons_outline:cube',
-                link: '/request/trace'
+                icon: 'feather:search',
+                link: '/request/trace/sgc'
               },
               {
                 id: 'request.invoice',
@@ -87,12 +88,81 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id: 'report.by_date',
                 title: 'Por fecha',
                 type: 'basic',
-                icon: 'heroicons_outline:document-text',
+                icon: 'feather:calendar',
                 link: '/report/by_date'
               },
             ]
           },
         ],
+      },
+      {
+        id: 'sci',
+        title: 'SCI',
+        subtitle: '',
+        type: 'collapsable',
+        icon: 'feather:check',
+        children: [
+          {
+            id: 'request',
+            title: 'Solicitudes',
+            subtitle: '',
+            type: 'collapsable',
+            icon: '',
+            children:[
+              {
+                id: 'request.create',
+                title: 'Nuevo',
+                type: 'basic',
+                icon: 'heroicons_outline:pencil-alt',
+                link: '/request/create/sci'
+              },
+              {
+                id: 'request.list',
+                title: 'Listar',
+                type: 'basic',
+                icon: 'heroicons_outline:menu-alt-2',
+                link: '/request/list/sci'
+              },
+              {
+                id: 'request.detail',
+                title: 'Detalle',
+                type: 'basic',
+                icon: 'heroicons_outline:newspaper',
+                link: '/request/detail'
+              },
+              {
+                id: 'request.trace',
+                title: 'Seguimiento',
+                type: 'basic',
+                icon: 'feather:search',
+                link: '/request/trace/sci'
+              },
+              {
+                id: 'request.invoice',
+                title: 'Radicado',
+                type: 'basic',
+                icon: 'heroicons_outline:mail',
+                link: '/request/invoice'
+              },
+            ]
+          },
+          {
+            id: 'report',
+            title: 'Reportes',
+            subtitle: '',
+            type: 'collapsable',
+            icon: '',
+            children:[
+              {
+                id: 'report.by_date',
+                title: 'Por fecha',
+                type: 'basic',
+                icon: 'feather:calendar',
+                link: '/report/by_date'
+              },
+            ]
+          },
+        ]
       },
     ]
   },
