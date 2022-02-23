@@ -74,6 +74,16 @@ export class RequestInitSGCComponent
     this.loadUsers('user_name_3', '1')
     this.loadUsers('user_name_4', '1')
     this.loadUsers('user_name_5', '1')
+    this.loadUsers('person_assigned_id_1', '2')
+    this.loadUsers('person_assigned_id_2', '2')
+    this.loadUsers('person_assigned_id_3', '2')
+    this.loadUsers('person_assigned_id_4', '2')
+    this.loadUsers('person_assigned_id_5', '2')
+    this.loadUsers('person_assigned_id_1', '3')
+    this.loadUsers('person_assigned_id_2', '3')
+    this.loadUsers('person_assigned_id_3', '3')
+    this.loadUsers('person_assigned_id_4', '3')
+    this.loadUsers('person_assigned_id_5', '3')
     this.loadStep1()
     this.loadStep2()
     this.loadStep3()
@@ -123,12 +133,11 @@ export class RequestInitSGCComponent
         let count = 1;
         v['data'].forEach((uplan: any) => {
             this.getStep(2).get('goal_description_' + count).setValue(uplan.goal_description)
-            this.getStep(2).get('person_assigned_' + count).setValue(uplan.person_assigned)
+            this.getStep(2).get('person_assigned_id_' + count).setValue({ id: uplan.person_assigned_id, name: uplan.person_assigned_name })
             this.getStep(2).get('init_date_' + count).setValue(moment(uplan.init_date, 'YYYY-MM-DD HH:mm:ss').toDate())
             this.getStep(2).get('end_date_' + count).setValue(moment(uplan.end_date, 'YYYY-MM-DD HH:mm:ss').toDate())
             this.getStep(2).get('unit_measurement_' + count).setValue(uplan.unit_measurement)
             this.getStep(2).get('follow_process_description_' + count).setValue(uplan.follow_process_description)
-            this.getStep(2).get('percentage_' + count).setValue(uplan.percentage)
             count += 1
         });
         for (let index = 0; index < count-2; index++) {
@@ -149,12 +158,11 @@ export class RequestInitSGCComponent
         let count = 1;
         v['data'].forEach((uplan: any) => {
             this.getStep(4).get('goal_description_' + count).setValue(uplan.goal_description)
-            this.getStep(4).get('person_assigned_' + count).setValue(uplan.person_assigned)
+            this.getStep(4).get('person_assigned_id_' + count).setValue({ id: uplan.person_assigned_id, name: uplan.person_assigned_name })
             this.getStep(4).get('init_date_' + count).setValue(moment(uplan.init_date, 'YYYY-MM-DD HH:mm:ss').toDate())
             this.getStep(4).get('end_date_' + count).setValue(moment(uplan.end_date, 'YYYY-MM-DD HH:mm:ss').toDate())
             this.getStep(4).get('unit_measurement_' + count).setValue(uplan.unit_measurement)
             this.getStep(4).get('follow_process_description_' + count).setValue(uplan.follow_process_description)
-            this.getStep(4).get('percentage_' + count).setValue(uplan.percentage)
             count += 1
         });
         for (let index = 0; index < count-2; index++) {
@@ -372,24 +380,6 @@ export class RequestInitSGCComponent
     }
   }
 
-  get finishFormControl() {
-    return {
-      user_tracking_id: ['', [Validators.required, SelectionRequiredValidator]],
-      user_granted_id: ['', [Validators.required, SelectionRequiredValidator]],
-      tracking_date: ['', [Validators.required]],
-      tracking_date_period_init: ['', [Validators.required]],
-      tracking_date_period_end: ['', [Validators.required]],
-      result_analysis: ['', [Validators.required]],
-      objective: ['', [Validators.required]],
-      total_review: ['', [Validators.required]],
-      total_agree: ['', [Validators.required]],
-      total_disagree: ['', [Validators.required]],
-      total_fulfilment: ['', [Validators.required]],
-      result_code: ['', [Validators.required, SelectionRequiredValidator]],
-      created_at: [moment().toDate(), [Validators.required]],
-    }
-  }
-
   autofillWeek(counter: any, step: string | number) {
     const value = this.getStep(step).value
     console.log(value)
@@ -407,13 +397,12 @@ export class RequestInitSGCComponent
     const upgradePlanIFormControl = {}
     for (let count = 1; count <= 5; count++) {
       upgradePlanIFormControl[`goal_description_${count}`] = ['', [Validators.required]]
-      upgradePlanIFormControl[`person_assigned_${count}`] = ['', [Validators.required]]
+      upgradePlanIFormControl[`person_assigned_id_${count}`] = ['', [Validators.required, SelectionRequiredValidator]]
       upgradePlanIFormControl[`init_date_${count}`] = ['', [Validators.required]]
       upgradePlanIFormControl[`end_date_${count}`] = ['', [Validators.required]]
       upgradePlanIFormControl[`unit_measurement_${count}`] = ['', [Validators.required]]
       upgradePlanIFormControl[`follow_process_description_${count}`] = ['', [Validators.required]]
       upgradePlanIFormControl[`evidence_file_${count}`] = ['', [Validators.required]]
-      upgradePlanIFormControl[`percentage_${count}`] = ['', [Validators.required]]
     }
     return upgradePlanIFormControl
   }
@@ -422,13 +411,12 @@ export class RequestInitSGCComponent
     const upgradePlanDFormControl = {}
     for (let count = 1; count <= 5; count++) {
       upgradePlanDFormControl[`goal_description_${count}`] = ['', [Validators.required]]
-      upgradePlanDFormControl[`person_assigned_${count}`] = ['', [Validators.required]]
+      upgradePlanDFormControl[`person_assigned_id_${count}`] = ['', [Validators.required, SelectionRequiredValidator]]
       upgradePlanDFormControl[`init_date_${count}`] = ['', [Validators.required]]
       upgradePlanDFormControl[`end_date_${count}`] = ['', [Validators.required]]
       upgradePlanDFormControl[`unit_measurement_${count}`] = ['', [Validators.required]]
       upgradePlanDFormControl[`follow_process_description_${count}`] = ['', [Validators.required]]
       upgradePlanDFormControl[`evidence_file_${count}`] = ['', [Validators.required]]
-      upgradePlanDFormControl[`percentage_${count}`] = ['', [Validators.required]]
     }
     return upgradePlanDFormControl
   }
@@ -442,23 +430,21 @@ export class RequestInitSGCComponent
       ],
       2: [
         'goal_description',
-        'person_assigned',
+        'person_assigned_id',
         'init_date',
         'end_date',
         'unit_measurement',
         'follow_process_description',
-        'evidence_file',
-        'percentage'
+        'evidence_file'
       ],
       4: [
         'goal_description',
-        'person_assigned',
+        'person_assigned_id',
         'init_date',
         'end_date',
         'unit_measurement',
         'follow_process_description',
-        'evidence_file',
-        'percentage'
+        'evidence_file'
       ]
     }
     Object.keys(nameCollection).forEach((step) => {
@@ -537,7 +523,7 @@ export class RequestInitSGCComponent
       this.upgradePlanI.forEach((count) => {
         data.push({
           goal_description:  formValues[`goal_description_${count}`],
-          person_assigned:  formValues[`person_assigned_${count}`],
+          person_assigned_id:  formValues[`person_assigned_id_${count}`]['id'],
           init_date:  formValues[`init_date_${count}`],
           end_date:  formValues[`end_date_${count}`],
           unit_measurement:  formValues[`unit_measurement_${count}`],
@@ -574,7 +560,7 @@ export class RequestInitSGCComponent
       this.upgradePlanD.forEach((count) => {
         data.push({
           goal_description:  formValues[`goal_description_${count}`],
-          person_assigned:  formValues[`person_assigned_${count}`],
+          person_assigned_id:  formValues[`person_assigned_id_${count}`]['id'],
           init_date:  formValues[`init_date_${count}`],
           end_date:  formValues[`end_date_${count}`],
           unit_measurement:  formValues[`unit_measurement_${count}`],

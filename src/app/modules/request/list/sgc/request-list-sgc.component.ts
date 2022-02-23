@@ -119,11 +119,11 @@ export class RequestListSGCComponent{
 
   editViability(element: any, type: 'follow' | 'init' | 'finish') {
     if (type == 'init') {
-      return this.currentUser.role_code == ADMIN || (this.currentUser.id == element.process_lead_id && [ PENDING ].includes(element.status_code))
+      return this.currentUser?.role_code == ADMIN || (this.currentUser.id == element.process_lead_id && [ PENDING ].includes(element.status_code))
     } else if (type == 'follow') {
-      return this.currentUser.role_code == ADMIN || (this.currentUser.id == element.process_lead_id && [ OPEN ].includes(element.status_code))
+      return this.currentUser?.role_code == ADMIN || (this.currentUser.id == element.process_lead_id && [ OPEN ].includes(element.status_code))
     } else if (type == 'finish') {
-      return this.currentUser.role_code == ADMIN && [ R_TO_CLOSE ].includes(element.status_code)
+      return this.currentUser?.role_code == ADMIN && [ R_TO_CLOSE ].includes(element.status_code)
     } else {
       return false
     }

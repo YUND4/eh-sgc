@@ -54,7 +54,9 @@ export class RequestFinishSGCComponent
         result_code: ['', [Validators.required, SelectionRequiredValidator]],
         created_at: [moment().toDate(), [Validators.required]],
       })
-
+    this.formControl.get('total_fulfilment').disable()
+    this.formControl.get('total_review').disable()
+    this.formControl.get('created_at').disable()
     this._route.params.subscribe(params => {
       this.requestId = params['id']
     });
@@ -78,27 +80,28 @@ export class RequestFinishSGCComponent
   }
 
   loadStep5() {
-    // this._service.retriveStep(5, SGC.toLocaleLowerCase(), this.requestId).subscribe({
-    //   next: (v) => {
-    //     if (v['data'].length != 0){
-    //       const frequest = v['data'][0]
-    //       this.formControl.get('objective').setValue(frequest.objective)
-    //       this.formControl.get('result_analysis').setValue(frequest.result_analysis)
-    //       this.formControl.get('result_code').setValue({ description: frequest.result_description })
-    //       this.formControl.get('total_agree').setValue(frequest.total_agree)
-    //       this.formControl.get('total_disagree').setValue(frequest.total_disagree)
-    //       this.formControl.get('total_fulfilment').setValue(frequest.total_fulfilment)
-    //       this.formControl.get('total_review').setValue(frequest.total_review)
-    //       this.formControl.get('tracking_date').setValue(frequest.tracking_date)
-    //       this.formControl.get('created_at').setValue(moment(frequest.created_at).toDate())
-    //       this.formControl.get('tracking_date_period_end').setValue(moment(frequest.tracking_date_period_end, 'YYYY-MM-DD HH:mm:ss').toDate())
-    //       this.formControl.get('tracking_date_period_init').setValue(moment(frequest.tracking_date_period_init, 'YYYY-MM-DD HH:mm:ss').toDate())
-    //       this.formControl.get('tracking_date').setValue(moment(frequest.tracking_date, 'YYYY-MM-DD HH:mm:ss').toDate())
-    //       this.formControl.get('user_granted_id').setValue({ name: frequest.user_granted_name })
-    //       this.formControl.get('user_tracking_id').setValue({ name: frequest.user_tracking_name })
-    //     }
-    //   }
-    // })
+    this._service.retriveStep(5, SGC.toLocaleLowerCase(), this.requestId).subscribe({
+      next: (v) => {
+        if (v['data'].length != 0){
+          const frequest = v['data'][0]
+          this.formControl.get('objective').setValue(frequest.objective)
+          this.formControl.get('result_analysis').setValue(frequest.result_analysis)
+          this.formControl.get('result_code').setValue({ description: frequest.result_description })
+          this.formControl.get('total_agree').setValue(frequest.total_agree)
+          this.formControl.get('total_disagree').setValue(frequest.total_disagree)
+          this.formControl.get('total_fulfilment').setValue(frequest.total_fulfilment)
+          this.formControl.get('total_review').setValue(frequest.total_review)
+          this.formControl.get('tracking_date').setValue(frequest.tracking_date)
+          this.formControl.get('created_at').setValue(moment(frequest.created_at).toDate())
+          this.formControl.get('tracking_date_period_end').setValue(moment(frequest.tracking_date_period_end, 'YYYY-MM-DD HH:mm:ss').toDate())
+          this.formControl.get('tracking_date_period_init').setValue(moment(frequest.tracking_date_period_init, 'YYYY-MM-DD HH:mm:ss').toDate())
+          this.formControl.get('tracking_date').setValue(moment(frequest.tracking_date, 'YYYY-MM-DD HH:mm:ss').toDate())
+          this.formControl.get('user_granted_id').setValue({ name: frequest.user_granted_name })
+          this.formControl.get('user_tracking_id').setValue({ name: frequest.user_tracking_name })
+          this.formControl.disable()
+        }
+      }
+    })
   }
 
   loadUsers(selectable: string, step: string) {
@@ -168,6 +171,8 @@ export class RequestFinishSGCComponent
 
   submit() {
     if (this.formControl.valid) {
+      this.formControl.get('total_fulfilment').enable()
+      this.formControl.get('total_review').enable()
       const data = {...this.formControl.value}
       data['result_code'] = data['result_code']['code']
       data['user_granted_id'] = data['user_granted_id']['id']
@@ -186,6 +191,8 @@ export class RequestFinishSGCComponent
       })
       console.log("Paso valido")
     } else { this.validationError() }
+    this.formControl.get('total_fulfilment').disable()
+    this.formControl.get('total_review').disable()
 
   }
   validationError() {

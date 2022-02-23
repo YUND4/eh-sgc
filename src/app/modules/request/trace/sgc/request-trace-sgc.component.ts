@@ -6,6 +6,7 @@ import { SGC } from 'app/shared/constants/request-types.constants';
 import * as moment from 'moment';
 import { formatDate } from '@angular/common';
 import { TrackingService } from 'app/shared/services/tracking.service';
+import { AlertService } from 'app/shared/services/dialog.service';
 
 @Component({
   selector: 'request-trace',
@@ -17,7 +18,7 @@ export class RequestTraceSGCComponent {
   formControl: FormGroup;
   upgradePlanD: number[] = [];
   requestId: any;
-  data: any;
+  data: any = {};
   quillConfiguration = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -28,7 +29,7 @@ export class RequestTraceSGCComponent {
       ['clean'],
     ],
   }
-  trackings: any = [];
+  trackings: any = {};
   selectedIndex;
   lastPercentage: any;
 
@@ -39,6 +40,7 @@ export class RequestTraceSGCComponent {
     private _route: ActivatedRoute,
     private _cdr: ChangeDetectorRef,
     @Inject(LOCALE_ID) public locale: string,
+    private _alert: AlertService
   ) {
 
     this._route.params.subscribe(params => {
@@ -47,9 +49,9 @@ export class RequestTraceSGCComponent {
     });
 
     this.formControl = this._formBuilder.group({
-      goal_description: ['', Validators.required],
-      follow_process_description: ['', Validators.required],
-      percentage: ['', Validators.required]
+      goal_description: ['', [Validators.required]],
+      follow_process_description: ['', [Validators.required]],
+      percentage: ['', [Validators.required]]
     })
   }
 
@@ -60,12 +62,12 @@ export class RequestTraceSGCComponent {
   loadStep4() {
     this._wizardService.retriveStep(4, SGC.toLocaleLowerCase(), this.requestId).subscribe({
       next: (v) => {
-        this.data = v['data'];
-        this.getAll(v['data'])
-        for (let index = 0; index < this.data.length; index++) {
+        for (let index = 0; index < v['data'].length; index++) {
+          this.data[v['data'][index].id] = v['data'][index]
           this.addCauses(this.upgradePlanD)
           this._cdr.detectChanges()
         }
+        this.getAll()
       }
     })
   }
@@ -83,30 +85,54 @@ export class RequestTraceSGCComponent {
     }
   }
 
-  new() {
-    this.formControl.setValue({
-      goal_description: '',
-      follow_process_description: '',
-      percentage: '',
-    })
-    this.selectedIndex = null
-    this.formControl.enable()
+  new(key) {
+    if (this.trackings[key][this.trackings[key].length - 1].percentage < 100) {
+      this.formControl.setValue({
+        goal_description: '',
+        follow_process_description: '',
+        percentage: '',
+      })
+      this.selectedIndex = null
+      this.formControl.enable()
+    }
   }
 
-  create(index: number) {
+  create(key: any) {
     if (this.formControl.valid) {
-      const request = { ...this.formControl.value }
-      request['upgrade_plan_id'] = this.data[index - 1].id
-      this._trackingService.createTracking(request).subscribe({
-        next: (v) => {
-          this.getAll(this.data)
-          this.formControl.setValue({
-            goal_description: '',
-            follow_process_description: '',
-            percentage: ''
-          })
-        }
-      })
+      if (this.formControl.get('percentage').value) {
+        this._alert.confirmation('Al marcar un seguimiento al 100% esta accion correctiva se cerrara, ¿Deseas continuar?').afterClosed().subscribe({
+          next: (v) => {
+            if (v == 'confirmed') {
+              console.log(v)
+              const request = { ...this.formControl.value }
+              request['upgrade_plan_id'] = key
+              this._trackingService.createTracking(request).subscribe({
+                next: (v) => {
+                  this.getAll()
+                  this.formControl.setValue({
+                    goal_description: '',
+                    follow_process_description: '',
+                    percentage: ''
+                  })
+                }
+              })
+            }
+          } 
+        })
+      } else {
+            const request = { ...this.formControl.value }
+            request['upgrade_plan_id'] = key
+            this._trackingService.createTracking(request).subscribe({
+              next: (v) => {
+                this.getAll()
+                this.formControl.setValue({
+                  goal_description: '',
+                  follow_process_description: '',
+                  percentage: ''
+                })
+              }
+            })
+      }
     } else {
       console.log('invalido')
     }
@@ -123,7 +149,7 @@ export class RequestTraceSGCComponent {
   }
 
   getPercentage(list) {
-    if (list) {
+    if (list && list.length != 0) {
       this.lastPercentage = list[list.length-1].percentage
       return this.lastPercentage
     }
@@ -133,16 +159,23 @@ export class RequestTraceSGCComponent {
     return 'primary'
   }
 
-  getAll(data: any) {
-    this.trackings = []
-    data.forEach((upgrade_plan: any) => {
-      this._trackingService.getTrackings(upgrade_plan.id).subscribe({
+  getAll() {
+    this.trackings = {}
+    Object.keys(this.data).forEach((key: any) => {
+      this._trackingService.getTrackings(key).subscribe({
         next: (v) => {
-          this.trackings.push(v['data'])
-          console.log(this.trackings)
+          this.trackings[key] = v['data']
+          if (this.trackings[key][this.trackings[key].length - 1].percentage >= 100) {
+            this.formControl.disable()
+          }
           this._cdr.detectChanges()
         }
       })
     });
   }
+
+  get object() {
+    return Object
+  }
+  
 }

@@ -36,8 +36,7 @@
         <div class="max-w-6xl">
 
           <mat-tab-group>
-            <mat-tab *ngFor="let i of upgradePlanD" [label]="'Accion Correctiva
-              ' + i">
+            <mat-tab *ngFor="let i of object.keys(data)" [label]="data[i].goal_description">
               <div class="flex flex-wrap w-full">
                 <div class="flex w-2/3">
                   <div class="flex flex-col h-130 shadow rounded-2xl
@@ -69,10 +68,10 @@
                       <!-- Course progress -->
                       <div class="relative h-0.5">
                         <div class="z-10 absolute inset-x-0 h-6 -mt-3"
-                          [matTooltip]="getPercentage(trackings[i-1]) / 100 | percent"
+                          [matTooltip]="getPercentage(trackings[data[i]]) / 100 | percent"
                           [matTooltipPosition]="'above'"
                           [matTooltipClass]="'-mb-0.5'"></div>
-                        <mat-progress-bar class="h-0.5" [color]="getColor()" [value]="getPercentage(trackings[i-1])"></mat-progress-bar>
+                        <mat-progress-bar class="h-0.5" [color]="getColor()" [value]="getPercentage(trackings[data[i]])"></mat-progress-bar>
                       </div>
 
                       <!-- Course launch button -->
@@ -99,7 +98,7 @@
                     max-h-130 ml-5 mt-5 w-full">
 
                     <div class="px-6 py-4 text-right">
-                      <button mat-button class="bg-primary text-white" (click)="new()">
+                      <button mat-button class="bg-primary text-white" (click)="new(i)">
                         <span class="inline-flex items-start">
                           <!-- Started -->
                           <ng-container>
@@ -113,7 +112,7 @@
                       </button>
                     </div>
                     <div class="flex flex-col flex-auto flex-shrink">
-                      <div class="flex items-center mt-2" *ngFor="let obj of trackings[i-1]; let index" [ngClass]="{'bg-gray-200': selectedIndex == index}" style="cursor: pointer;" (click)="setForm(obj, index)">
+                      <div class="flex items-center mt-2" *ngFor="let obj of trackings[i]; let index" [ngClass]="{'bg-gray-200': selectedIndex == index}" style="cursor: pointer;" (click)="setForm(obj, index)">
                         <!-- Low stock -->
                         <div
                           class="flex items-end ml-2 w-1 h-4 bg-red-200 rounded

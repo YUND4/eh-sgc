@@ -1,16 +1,16 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material/stepper';
 import { SGC } from 'app/shared/constants/request-types.constants';
 import { WizardService } from '../../../../../../shared/services/wizard.service';
 import { ActivatedRoute } from '@angular/router';
+import { AlertService } from 'app/shared/services/dialog.service';
 
 @Component({
   selector: 'step3',
   templateUrl: './step3.component.html',
   styleUrls: ['./step3.component.scss']
 })
-export class Step3Component implements OnInit {
+export class Step3Component {
   question: string = '¿Visto el sitio del hallazgo?';
   info: string = '';
   questionaryControl: FormGroup;
@@ -31,6 +31,7 @@ export class Step3Component implements OnInit {
     private _formBuilder: FormBuilder,
     private _service: WizardService,
     private _route: ActivatedRoute,
+    private _alert: AlertService
   ) {
     this.questionaryConfig = [
       {
@@ -151,9 +152,6 @@ export class Step3Component implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-  }
-
   rootFinder() {
     this.question = `¿Porque ${this.questionaryControl.value['answer'].replace('¿', '')}?`
     this.questionaryControl.get('answer').setValue('')
@@ -179,6 +177,16 @@ export class Step3Component implements OnInit {
       this.question = nextQuestion.question
       this.answers = nextQuestion.answers
     }
+  }
+
+  backEvent(){
+    if (this.questionaryDone) { this.questionaryDone = false }
+    this.currentQuestion -= 1
+    while (!['Si', 'No'].includes(this.data[this.data.length - 1].answer)) { this.data.pop() }
+    this.data.pop()
+    const nextQuestion = this.questionaryConfig[this.currentQuestion]
+    this.question = nextQuestion.question
+    this.answers = nextQuestion.answers
   }
 
   successEvent() {
@@ -215,6 +223,8 @@ export class Step3Component implements OnInit {
         })
         this.nextQuestion()
       }
+    } else {
+      this._alert.error('No puedes continuar hasta confirmar esta informacion.')
     }
   }
 
@@ -246,6 +256,7 @@ export class Step3Component implements OnInit {
       .subscribe({
         next: (v)  => {
           console.log(`Correcto ${v['data']}`)
+          this._alert.sucess('Buen trabajo! Analisis de causas completado.')
           this.stepper.next()
         },
         error: (e) => { this.serverError() },

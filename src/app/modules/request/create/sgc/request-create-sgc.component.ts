@@ -7,11 +7,7 @@ import { UserModel } from '../../../../shared/models/user.model';
 import { UserService } from '../../../../shared/services/users.service';
 import { SelectableService } from 'app/shared/services/selectable.service';
 import { SelectableModel } from '../../../../shared/models/selectable.model';
-import { MatDialog } from '@angular/material/dialog';
-import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 import { AlertService } from '../../../../shared/services/dialog.service';
-import { messages } from '../../../../mock-api/common/messages/data';
-import { formatDate } from '@angular/common';
 import * as moment from 'moment';
 import { SelectionRequiredValidator } from '../../../../shared/validators/onlySelectable';
 
@@ -41,6 +37,7 @@ export class RequestCreateSGCComponent implements OnInit {
   inputTimeout: any;
   base64File: string | ArrayBuffer = '';
   selects: SelectableModel[];
+  minDate: Date = moment().toDate();
 
 
 

@@ -109,7 +109,12 @@
                   </mat-form-field>
                   <mat-form-field class="w-1/2">
                     <mat-label>Nombre del responsable</mat-label>
-                    <input matInput [name]="('person_assigned_'+i)" [id]="('person_assigned_'+i)" [formControlName]="('person_assigned_'+i)">
+                    <input matInput [name]="('person_assigned_id_'+i)" [id]="('person_assigned_id_'+i)" [formControlName]="('person_assigned_id_'+i)" [matAutocomplete]="auto20" (input)="onChangeFilter('person_assigned_id_'+i, 'user', '2')" />
+                    <mat-autocomplete #auto20="matAutocomplete" [displayWith]="displayUser">
+                      <ng-container>
+                        <mat-option *ngFor="let user of selectables['person_assigned_id_'+i]" [value]="user" >{{user.name}}</mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
                   </mat-form-field>
                 </div>
                 <div class="w-full">
@@ -136,14 +141,10 @@
 
                 </div>
                 <div class="w-full">
-                  <mat-form-field class="w-2/3 pr-4">
+                  <mat-form-field class="w-full">
                     <mat-label [id]="('evidence_file_'+i)">Evidencia</mat-label>
                     <ngx-mat-file-input [name]="('evidence_file_'+i)" [formControlName]="('evidence_file_'+i)" (change)="onChangeFileI('2', 'evidence_file_'+i)"></ngx-mat-file-input>
                     <mat-icon matSuffix>folder</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field class="w-1/3">
-                    <mat-label>Avance</mat-label>
-                    <input matInput type="number" [name]="('percentage_'+i)" [id]="('percentage_'+i)" [formControlName]="('percentage_'+i)">
                   </mat-form-field>
                 </div>
               </mat-tab>
@@ -182,7 +183,12 @@
                   </mat-form-field>
                   <mat-form-field class="w-1/2">
                     <mat-label>Nombre del responsable</mat-label>
-                    <input matInput [name]="('person_assigned_'+i)" [id]="('person_assigned_'+i)" [formControlName]="('person_assigned_'+i)">
+                    <input matInput [name]="('person_assigned_id_'+i)" [id]="('person_assigned_id_'+i)" [formControlName]="('person_assigned_id_'+i)" [matAutocomplete]="auto30" (input)="onChangeFilter('person_assigned_id_'+i, 'user', '4')" />
+                    <mat-autocomplete #auto30="matAutocomplete" [displayWith]="displayUser">
+                      <ng-container>
+                        <mat-option *ngFor="let user of selectables['person_assigned_id_'+i]" [value]="user" >{{user.name}}</mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
                   </mat-form-field>
                 </div>
                 <div class="w-full">
@@ -208,14 +214,10 @@
                   <quill-editor [name]="('follow_process_description_'+i)" [id]="('follow_process_description_'+i)" [formControlName]="('follow_process_description_'+i)" [styles]="{height: '400px'}"></quill-editor>
                 </div>
                 <div class="w-full">
-                  <mat-form-field class="w-2/3 pr-4">
+                  <mat-form-field class="w-full">
                     <mat-label [id]="('evidence_file_'+i)">Evidencia</mat-label>
                     <ngx-mat-file-input [name]="('evidence_file_'+i)" [formControlName]="('evidence_file_'+i)" (change)="onChangeFileD('4', 'evidence_file_'+i)"></ngx-mat-file-input>
                     <mat-icon matSuffix>folder</mat-icon>
-                  </mat-form-field>
-                  <mat-form-field class="w-1/3">
-                    <mat-label>Avance</mat-label>
-                    <input matInput type="number" [name]="('percentage_'+i)" [id]="('percentage_'+i)" [formControlName]="('percentage_'+i)">
                   </mat-form-field>
                 </div>
               </mat-tab>

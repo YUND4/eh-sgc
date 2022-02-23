@@ -31,7 +31,7 @@
         <div class="w-full">
           <mat-form-field class="w-1/4 pl-2">
             <mat-label>Fecha inicio</mat-label>
-            <input matInput [matDatepicker]="picker1" name="init_date" formControlName="init_date">
+            <input matInput [min]="minDate" [matDatepicker]="picker1" name="init_date" formControlName="init_date">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
@@ -62,7 +62,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <mat-form-field class="w-1/3 pl-4">
-            <mat-label>Requisito incumplido***********</mat-label>
+            <mat-label>Requisito afectado</mat-label>
             <input matInput name="unfulfilled_requirement_code" formControlName="unfulfilled_requirement_code" [matAutocomplete]="auto3" (input)="onChangeFilter('unfulfilledRequirement', 'selectable')" />
             <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displaySelectable">
               <ng-container>
