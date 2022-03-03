@@ -46,10 +46,9 @@ export class BaseInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse && error.status === 401 && !error.url.includes('api/auth/login')) {
           // Sign out
           this._authService.signOut();
-          console.log(error)
 
           // Reload the app
-          // location.reload();
+          location.reload();
         }
 
         return throwError(() => error);
