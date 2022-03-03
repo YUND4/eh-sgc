@@ -22,6 +22,7 @@ export class BaseInterceptor implements HttpInterceptor {
     // Clone the request object
 
     let newReq = req.clone({
+      url: `${req.url.replace('/acciones-mejoramiento', '')}`,
     });
 
     // Request
@@ -34,6 +35,7 @@ export class BaseInterceptor implements HttpInterceptor {
     // the user out from the app.
     if (this._authService.accessToken && !AuthUtils.isTokenExpired(this._authService.accessToken)) {
       newReq = req.clone({
+        url: `${req.url.replace('/acciones-mejoramiento', '')}`,
         headers: req.headers.set('Authorization', 'Bearer ' + this._authService.accessToken)
       });
     }
