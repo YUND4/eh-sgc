@@ -1,33 +1,5 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
 
-  <mat-drawer-container
-      class="flex-auto h-full bg-card dark:bg-transparent">
-
-      <!-- Drawer -->
-      <mat-drawer
-          class="w-full sm:w-128 dark:bg-gray-900"
-          [mode]="drawerMode"
-          [opened]="false"
-          [position]="'end'"
-          [disableClose]="true"
-          #matDrawer>
-          <mat-sidenav-container class="example-container">
-            <mat-sidenav #sidenav mode="side">
-              Sidenav content
-            </mat-sidenav>
-
-            <mat-sidenav-content>
-              <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p>
-              <p>Events:</p>
-              <div class="example-events">
-                <div *ngFor="let e of ['q', 'c']">{{e}}</div>
-              </div>
-            </mat-sidenav-content>
-          </mat-sidenav-container>
-      </mat-drawer>
-
-      <mat-drawer-content class="flex flex-col">
-
           <!-- Main -->
           <div class="flex flex-col flex-auto">
 
@@ -35,8 +7,7 @@
               <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-8 px-6 md:px-8">
                   <!-- Title -->
                   <div>
-                      <div class="text-4xl font-extrabold tracking-tight leading-none">Seleccionables</div>
-                      <div class="ml-0.5 font-medium text-secondary">
+                      <div class="ml-0.5 mt-15 font-medium text-secondary">
                           <span >Crea o elimina los elementos seleccionables</span>
                       </div>
                   </div>
@@ -131,9 +102,5 @@
               </ng-template>
 
           </div>
-
-      </mat-drawer-content>
-
-  </mat-drawer-container>
 
 </div>

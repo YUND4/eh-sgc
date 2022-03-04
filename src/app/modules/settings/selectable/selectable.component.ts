@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TagModel } from 'app/shared/models/tag.model';
 import { SelectableModel } from '../../../shared/models/selectable.model';
@@ -16,9 +15,6 @@ import { SelectableCreateComponent } from './create/create.component';
 })
 export class SettingsSelectableComponent implements OnInit
 {
-  @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
-
-  drawerMode: 'side' | 'over';
   selectables = {
     status: 'Estado',
     detected_places: 'Detectado en',
